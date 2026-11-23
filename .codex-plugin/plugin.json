@@ -1,0 +1,20 @@
+{
+  "name": "harness",
+  "version": "0.1.0",
+  "description": "개인 에이전트 하네스 (Codex). 스킬(review, onboard, new-project, learn), 세션 시작 규칙 주입, 위험 명령 차단, 커밋·완료 전 검증 게이트.",
+  "author": { "name": "my-harness" },
+  "license": "MIT",
+  "keywords": ["harness", "review", "onboarding", "quality-gate"],
+  "skills": "./skills/",
+  "hooks": "./hooks/codex-hooks.json",
+  "interface": {
+    "displayName": "my-harness",
+    "shortDescription": "규칙 주입 · 위험 명령 차단 · 검증 게이트 · 5관점 리뷰 스킬",
+    "category": "Coding",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "Use the onboard skill to map this repository and propose .harness.json.",
+      "Use the review skill to review my branch before I open a PR."
+    ]
+  }
+}

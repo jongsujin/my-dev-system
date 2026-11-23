@@ -4,8 +4,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT
+export const PLUGIN_ROOT = process.env.CLAUDE_PLUGIN_ROOT || process.env.PLUGIN_ROOT
   || resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+
+/** 'claude' | 'codex'. Codex 훅 설정(codex-hooks.json)이 HARNESS_PLATFORM=codex 를 넘긴다. */
+export const PLATFORM = process.env.HARNESS_PLATFORM === 'codex' ? 'codex' : 'claude';
 
 export const CONFIG_FILE = '.harness.json';
 

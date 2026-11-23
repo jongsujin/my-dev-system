@@ -13,6 +13,36 @@ Claude Code가 프로젝트 규칙을 읽고, 코드를 편집하거나 커밋�
 
 설치 명령의 `harness`는 플러그인 이름이고 `my-harness`는 이 저장소가 등록하는 마켓플레이스 이름이다. 로컬 사본으로 개발할 때는 첫 번째 명령의 저장소 이름 자리에 로컬 경로를 넣는다.
 
+### Codex에 설치하기
+
+Codex CLI 0.171 기준으로 확인했다. 터미널에서 실행한다.
+
+```bash
+codex plugin marketplace add jongsujin/my-dev-system   # 로컬 사본이면 경로
+codex plugin add harness@my-harness
+codex plugin list                                     # harness@my-harness  installed, enabled
+```
+
+플러그인은 스킬 네 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 훅 내용이 바뀌면 다시 묻는다.
+
+Codex 플러그인은 서브에이전트를 설치하지 않는다. 리뷰어를 Codex 역할로 쓰려면 저장소 사본에서 변환 스크립트를 실행한다.
+
+```bash
+node scripts/codex-agents.mjs            # 만들 파일과 config.toml 블록 미리보기
+node scripts/codex-agents.mjs --apply    # ~/.codex/agents/harness-*.toml 생성, config.toml 에 [agents.*] 블록 추가
+node scripts/codex-agents.mjs --remove   # 제거
+```
+
+`--apply`와 `--remove`는 `config.toml`을 고치기 전에 `config.toml.harness-backup`으로 백업한다. 다시 실행하면 표시된 블록만 교체한다. `CODEX_HOME`을 지정하면 그 경로에 설치한다.
+
+Claude Code와 달라지는 점:
+
+| 항목 | Codex 동작 |
+| --- | --- |
+| 확인 요청(`ask`) | Codex 훅은 확인 요청을 지원하지 않는다. 확인이 필요한 명령은 실행하지 않고, 사용자에게 직접 실행할지 묻도록 안내한다. |
+| 파일 편집 직후 검사 | 실행되지 않는다. Codex의 편집 도구 입력 형식이 달라서다. 응답 완료 전 검사가 대신 확인한다. |
+| 리뷰어 | `harness_reviewer_security` 같은 역할 이름으로 하위 에이전트를 만든다. |
+
 ## 프로젝트에 적용하기
 
 설치 후 대상 프로젝트에서 **“이 레포 온보딩해줘”**라고 요청하면 `harness:onboard`가 실행·검사 명령을 조사하고 설정 초안을 제안한다. 직접 설정하려면 대상 프로젝트의 Git 루트에 `.harness.json`을 만든다. 다음은 `npm test`가 있는 프로젝트에서 시작할 수 있는 최소 예시다.

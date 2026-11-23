@@ -27,7 +27,10 @@ description: 현재 브랜치의 변경을 보안·품질·프론트엔드(Toss 
 | convention | `reviewer-convention` | 없음 (규칙 문서가 없으면 리뷰어가 스스로 skipped) |
 | test | `reviewer-test` | 문서만 바뀜 |
 
-플러그인으로 설치된 경우 서브에이전트 이름은 `harness:reviewer-security` 형태다.
+서브에이전트 이름은 플랫폼마다 다르다.
+- Claude Code (플러그인): `harness:reviewer-security`
+- Codex (`scripts/codex-agents.mjs`로 설치한 역할): `harness_reviewer_security` 역할로 하위 에이전트를 생성한다
+- 서브에이전트를 쓸 수 없는 환경: 관점별로 순서대로 직접 검토하되, 각 관점의 에이전트 정의(`agents/reviewer-*.md`)를 기준으로 삼는다
 
 ## 3. 병렬 호출
 

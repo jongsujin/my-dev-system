@@ -91,6 +91,17 @@ export function checkCommand(command, guard = { protectedBranches: ['main', 'mas
   return { decision: 'allow' };
 }
 
+/**
+ * 플랫폼이 지원하는 결정으로 바꾼다. Codex PreToolUse 는 'ask' 를 지원하지 않으므로
+ * 실행을 막고, 사용자에게 직접 실행할지 물어보라고 안내한다.
+ */
+export function toPlatformVerdict(verdict, platform) {
+  if (platform === 'codex' && verdict.decision === 'ask') {
+    return { decision: 'deny', reason: `확인이 필요한 명령이라 실행하지 않았습니다 (${verdict.reason}). 사용자에게 이 명령을 직접 실행할지 물어보세요.` };
+  }
+  return verdict;
+}
+
 /** git commit 명령인지 (커밋 전 게이트 대상). */
 export function isCommit(command) {
   return /(?:^|[;&|]\s*|\s)git\s+(?:-c\s+\S+\s+)*commit\b/.test(String(command || '')) && !/--dry-run/.test(command);
