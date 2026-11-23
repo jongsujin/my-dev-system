@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "my-harness/harness-config",
+  "title": ".harness.json — 레포별 하네스 설정",
+  "type": "object",
+  "properties": {
+    "verify": {
+      "type": "object",
+      "properties": {
+        "commands": { "type": "object", "additionalProperties": { "type": "string" }, "description": "이름 → 셸 명령" },
+        "onEdit": { "type": ["string", "null"], "description": "편집 직후 파일 하나에 돌릴 명령. {file} 자리에 경로" },
+        "onEditExtensions": { "type": "array", "items": { "type": "string" } },
+        "onStop": { "type": "array", "items": { "type": "string" }, "description": "완료 전 돌릴 commands 이름" },
+        "onCommit": { "type": "array", "items": { "type": "string" }, "description": "커밋 전 돌릴 commands 이름" }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "properties": { "block": { "type": "boolean", "description": "false 면 막지 않고 안내만" } }
+    },
+    "guard": {
+      "type": "object",
+      "properties": {
+        "protectedBranches": { "type": "array", "items": { "type": "string" } },
+        "deny": { "type": "array", "items": { "type": "string" }, "description": "막을 명령 정규식" },
+        "ask": { "type": "array", "items": { "type": "string" }, "description": "확인받을 명령 정규식" }
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "base": { "type": "string" },
+        "reviewers": { "type": "array", "items": { "enum": ["security", "quality", "frontend", "convention", "test"] } }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "rules": { "type": "array", "items": { "type": "string" }, "description": "rules/ 아래 주입할 폴더 (common 은 항상)" },
+        "maxLessons": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

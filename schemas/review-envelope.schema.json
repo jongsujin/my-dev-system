@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "my-harness/review-envelope",
+  "title": "리뷰어 결과 envelope",
+  "type": "object",
+  "required": ["reviewer", "summary", "findings"],
+  "properties": {
+    "reviewer": { "enum": ["security", "quality", "frontend", "convention", "test"] },
+    "summary": { "type": "string", "description": "한두 문장 요약. 발견 없으면 무엇을 봤는지." },
+    "skipped": { "type": "boolean", "description": "담당 파일이 없어 검토하지 않았으면 true" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "file", "title", "evidence", "why", "fix", "verified"],
+        "properties": {
+          "severity": { "enum": ["critical", "major", "minor"] },
+          "category": { "type": "string", "description": "kebab-case. 예: auth-bypass, n-plus-one, named-condition" },
+          "file": { "type": "string" },
+          "line": { "type": "integer" },
+          "title": { "type": "string" },
+          "evidence": { "type": "string", "description": "코드 원문 1~3줄 인용" },
+          "why": { "type": "string", "description": "어떤 입력·상황에서 무엇이 잘못되는지" },
+          "fix": { "type": "string" },
+          "verified": { "type": "boolean", "description": "실행·추적으로 확인했으면 true. false 면 severity 는 minor 까지만." },
+          "autoApplicable": { "type": "boolean", "description": "한 덩어리 교체로 끝나는 수정이면 true" }
+        }
+      }
+    }
+  }
+}

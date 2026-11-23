@@ -1,0 +1,28 @@
+{
+  "description": "my-harness: 규칙 주입, 위험 명령 차단, 편집 직후 검사, 커밋·완료 전 검증",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/session-start.mjs\"", "timeout": 10 }]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/guard.mjs\"", "timeout": 300 }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/lint-edited.mjs\"", "timeout": 90 }]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [{ "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/verify-stop.mjs\"", "timeout": 600 }]
+      }
+    ]
+  }
+}

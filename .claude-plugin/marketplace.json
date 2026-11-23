@@ -1,0 +1,12 @@
+{
+  "name": "my-harness",
+  "owner": { "name": "my-harness" },
+  "description": "개인 에이전트 하네스 마켓플레이스",
+  "plugins": [
+    {
+      "name": "harness",
+      "source": "./",
+      "description": "규칙 주입 · 위험 명령 차단 · 검증 게이트 · 5관점 병렬 리뷰 · 온보딩/새 프로젝트/학습 스킬"
+    }
+  ]
+}
