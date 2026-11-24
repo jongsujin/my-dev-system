@@ -2,6 +2,11 @@
 
 Claude Code가 프로젝트 규칙을 읽고, 코드를 편집하거나 커밋할 때 팀이 정한 검사를 실행하게 하는 개인 개발 하네스다. 하나의 플러그인을 여러 프로젝트에 설치하고, 각 프로젝트의 `.harness.json`에서 검사 명령과 리뷰 범위를 선택한다.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/overview-dark.svg">
+  <img src="docs/overview-light.svg" alt="my-harness 개요: 훅이 실행되는 다섯 지점, 리뷰어 여섯 개의 병렬 리뷰, 교훈이 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 .harness.json" width="960">
+</picture>
+
 ## 설치
 
 훅 실행에는 Node.js 18 이상과 Git이 필요하다. Claude Code에서 다음 두 명령을 차례로 실행한다.
@@ -94,5 +99,7 @@ Claude Code와 달라지는 점:
 npm test
 npm run build:agents-md -- typescript react
 ```
+
+README 위쪽의 개요 그림은 `node scripts/build-overview-svg.mjs`가 `docs/`에 만든다. 훅이나 리뷰어가 바뀌면 스크립트의 목록을 고치고 다시 실행한다.
 
 첫 명령은 위험 명령 판단, 교훈 선택, 설정 기본값과 검증 명령 해석을 검사한다. 두 번째 명령은 공통·TypeScript·React 규칙을 `dist/AGENTS.md` 한 파일로 합친다. 인자를 생략하면 공통 규칙만 담는다. 생성된 문서에서 필요한 지침을 Codex 등 다른 에이전트가 읽는 프로젝트의 `AGENTS.md`에 병합할 수 있다. [규칙 원본](rules/) · [내보내기 스크립트](scripts/build-agents-md.mjs)
