@@ -16,7 +16,7 @@ const THEMES = {
 
 // 훅이 실행되는 다섯 지점. kind 가 색을 정한다 (inject 읽힌다 / guard 막는다 / verify 검사한다).
 const HOOKS = [
-  { when: '세션 시작', what: '규칙·교훈 주입', notes: ['공통·스택 규칙과', '레포 교훈 상위 6개'], kind: 'inject' },
+  { when: '세션 시작', what: '규칙·작업 노트 주입', notes: ['공통·스택 규칙과', '레포 작업 노트 상위 6개'], kind: 'inject' },
   { when: '명령 실행 전', what: '위험 명령 차단', notes: ['rm -rf ~ · 강제 푸시', 'main 푸시·reset은 확인'], kind: 'guard' },
   { when: '파일 편집 직후', what: '고친 파일만 검사', notes: ['verify.onEdit', '예: ESLint'], kind: 'verify' },
   { when: '커밋 직전', what: '커밋 게이트', notes: ['verify.onCommit', '실패하면 커밋 차단'], kind: 'verify' },
@@ -89,10 +89,10 @@ function render(c) {
   rect(mid - RW / 2, RY, RW, RH, { fill: c.chip });
   text(mid, RY + 26, '통합 리포트 · critical / major / minor', { size: 13, weight: 600 });
 
-  // 교훈 승격
+  // 작업 노트 승격
   const RX = LX + LW + GAP, RWD = W - PAD - RX;
   rect(RX, SY, RWD, SH);
-  text(RX + 16, SY + 28, '교훈 승격', { size: 14, weight: 600, anchor: 'start' });
+  text(RX + 16, SY + 28, '작업 노트 승격', { size: 14, weight: 600, anchor: 'start' });
   text(RX + RWD - 16, SY + 28, '“다음부터 이렇게 해”', { size: 12, fill: c.muted, anchor: 'end' });
   const PW = 72, PG = 52;
   const pillsW = LADDER.length * PW + (LADDER.length - 1) * PG;
@@ -119,7 +119,7 @@ function render(c) {
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="t d">
 <title id="t">my-harness 개요</title>
-<desc id="d">훅 다섯 지점(세션 시작, 명령 실행 전, 파일 편집 직후, 커밋 직전, 응답 종료 전), 병렬 리뷰 스킬의 리뷰어 ${REVIEWERS.length}개, 교훈이 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 설정 파일.</desc>
+<desc id="d">훅 다섯 지점(세션 시작, 명령 실행 전, 파일 편집 직후, 커밋 직전, 응답 종료 전), 병렬 리뷰 스킬의 리뷰어 ${REVIEWERS.length}개, 작업 노트가 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 설정 파일.</desc>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="${c.muted}"/></marker></defs>
 ${out.join('\n')}
 </svg>

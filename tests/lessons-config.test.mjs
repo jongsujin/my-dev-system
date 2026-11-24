@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
 import { MAX_BLOCKS, MIN_COMMAND_MS, failureHead, normalizeConfig, runWithin, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
 
-const MD = `# 교훈
+const MD = `# 작업 노트
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->
 - [×1] dev 서버는 3001 포트 <!-- level:memo -->
 - [×2] 결제 테스트 키도 실제 출금될 수 있음
@@ -11,7 +11,7 @@ const MD = `# 교훈
 아무 문장
 `;
 
-test('교훈 파싱', () => {
+test('작업 노트 파싱', () => {
   const ls = parseLessons(MD);
   assert.equal(ls.length, 4);
   assert.deepEqual(ls[0], { count: 3, text: '커밋 메시지는 한글로', level: 'rule', updated: '2026-11-01' });

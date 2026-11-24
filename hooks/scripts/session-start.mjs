@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// SessionStart: 공용 규칙 + 레포가 고른 스택 규칙 + 레포 교훈 상위 N개를 주입한다.
+// SessionStart: 공용 규칙 + 레포가 고른 스택 규칙 + 레포 작업 노트 상위 N개를 주입한다.
 // 주입량은 MAX_CHARS 로 제한한다 (컨텍스트를 아끼기 위해).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -38,7 +38,7 @@ const parts = [`# 하네스 규칙 (${sets.join(', ')})`, ...sets.map(readRules)
 const lessonsPath = join(root, '.harness', 'lessons.md');
 if (existsSync(lessonsPath)) {
   const top = topLessons(readFileSync(lessonsPath, 'utf8'), config?.context.maxLessons ?? 6);
-  if (top.length) parts.push('# 이 레포에서 배운 교훈 (반복 횟수 순)', ...top.map(l => `- ${l.text} (×${l.count})`));
+  if (top.length) parts.push('# 이 레포 작업 노트 (반복 횟수 순)', ...top.map(l => `- ${l.text} (×${l.count})`));
 }
 
 function statusSection() {
