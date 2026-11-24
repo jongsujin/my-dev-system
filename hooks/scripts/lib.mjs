@@ -62,11 +62,29 @@ export function normalizeConfig(raw = {}) {
   };
 }
 
-/** 셸 명령 실행. { ok, out } — out 은 stdout+stderr 마지막 부분. */
-export function run(cmd, cwd, timeoutMs = 180_000) {
-  const r = spawnSync(cmd, { cwd, shell: true, encoding: 'utf8', timeout: timeoutMs, maxBuffer: 20 * 1024 * 1024 });
+/**
+ * 셸 명령 실행. { ok, out } — out 은 stdout+stderr 마지막 부분.
+ * extraEnv 는 자식 환경에 더한다. 사용자 입력(파일 경로 등)은 명령 문자열에 끼우지 말고 이걸로 넘긴다.
+ */
+export function run(cmd, cwd, timeoutMs = 180_000, extraEnv) {
+  const env = extraEnv ? { ...process.env, ...extraEnv } : process.env;
+  const r = spawnSync(cmd, { cwd, shell: true, encoding: 'utf8', timeout: timeoutMs, maxBuffer: 20 * 1024 * 1024, env });
   const out = `${r.stdout || ''}${r.stderr || ''}`;
   return { ok: r.status === 0, out: tail(out, 40) };
+}
+
+/**
+ * onEdit 명령의 {file} 을 "$HARNESS_FILE" 로 바꾼다. 순수 함수.
+ * 경로를 문자열로 끼우면 `a$(touch x).ts` 같은 파일 이름이 셸에서 실행되므로,
+ * 경로는 환경 변수로만 넘기고 명령에는 변수 참조만 둔다.
+ * 사용자가 이미 "{file}" 이나 '{file}' 로 감쌌으면 그 따옴표째 바꾼다
+ * (작은따옴표 안에서는 변수가 펼쳐지지 않으므로 큰따옴표로 바꿔야 한다).
+ */
+export function fileCommand(template) {
+  return String(template)
+    .replaceAll('"{file}"', '"$HARNESS_FILE"')
+    .replaceAll("'{file}'", '"$HARNESS_FILE"')
+    .replaceAll('{file}', '"$HARNESS_FILE"');
 }
 
 export function tail(text, lines) {
