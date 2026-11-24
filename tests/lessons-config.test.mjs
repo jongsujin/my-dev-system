@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
-import { MAX_BLOCKS, normalizeConfig, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
+import { MAX_BLOCKS, MIN_COMMAND_MS, failureHead, normalizeConfig, runWithin, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
 
 const MD = `# 교훈
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->
@@ -74,4 +74,16 @@ test('Stop 결정: 3번 막고 넘긴 뒤 바뀐 게 없으면 다시 막지 않
   assert.equal(step('s2'), 'block');
   assert.equal(step('s2', false), 'pass');
   assert.equal(step('s3', true, false), 'advisory');
+});
+
+test('시간 한도: 기본값과 남은 시간 부족', () => {
+  assert.equal(normalizeConfig({}).verify.timeoutSec, 180);
+  assert.equal(normalizeConfig({ verify: { timeoutSec: 30 } }).verify.timeoutSec, 30);
+  assert.equal(normalizeConfig({ verify: { timeoutSec: '30' } }).verify.timeoutSec, 180);
+  const now = 1_000_000;
+  const r = runWithin('true', '.', now + MIN_COMMAND_MS - 1, 180_000, now);
+  assert.equal(r.notRun, true);
+  assert.equal(r.ok, false);
+  assert.match(failureHead('lint', 'npm run lint', r), /실행하지 않음/);
+  assert.match(failureHead('lint', 'x', { timedOut: true, limitMs: 2000 }), /2초 안에 끝나지 않음/);
 });

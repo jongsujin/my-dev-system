@@ -65,6 +65,7 @@ export function normalizeConfig(raw = {}) {
       onEditExtensions: Array.isArray(v.onEditExtensions) ? v.onEditExtensions : ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'],
       onStop: names(v.onStop),
       onCommit: names(v.onCommit),
+      timeoutSec: typeof v.timeoutSec === 'number' && v.timeoutSec > 0 ? v.timeoutSec : 180,
     },
     gates: { block: raw.gates?.block !== false },
     guard: {
@@ -84,14 +85,41 @@ export function normalizeConfig(raw = {}) {
 }
 
 /**
- * 셸 명령 실행. { ok, out } — out 은 stdout+stderr 마지막 부분.
+ * 셸 명령 실행. { ok, out, timedOut } — out 은 stdout+stderr 마지막 부분.
+ * timedOut 은 시간 한도에 걸려 죽였다는 뜻이다 (일반 실패와 구분해 안내하기 위해).
  * extraEnv 는 자식 환경에 더한다. 사용자 입력(파일 경로 등)은 명령 문자열에 끼우지 말고 이걸로 넘긴다.
  */
 export function run(cmd, cwd, timeoutMs = 180_000, extraEnv) {
   const env = extraEnv ? { ...process.env, ...extraEnv } : process.env;
   const r = spawnSync(cmd, { cwd, shell: true, encoding: 'utf8', timeout: timeoutMs, maxBuffer: 20 * 1024 * 1024, env });
   const out = `${r.stdout || ''}${r.stderr || ''}`;
-  return { ok: r.status === 0, out: tail(out, 40) };
+  const timedOut = r.error?.code === 'ETIMEDOUT';
+  return { ok: r.status === 0 && !timedOut, out: tail(out, 40), timedOut };
+}
+
+// 훅 전체 시간 한도. hooks/hooks.json · hooks/codex-hooks.json 의 timeout(PreToolUse 300초, Stop 600초)보다
+// 짧게 둬야 훅이 강제 종료돼 검증 없이 커밋·종료되는 일을 막는다. 그쪽 값을 바꾸면 같이 바꾼다.
+export const COMMIT_HOOK_DEADLINE_MS = 270_000;
+export const STOP_HOOK_DEADLINE_MS = 570_000;
+/** 남은 시간이 이보다 적으면 명령을 시작하지 않는다. */
+export const MIN_COMMAND_MS = 5_000;
+
+/**
+ * 훅 마감 시각 안에서 명령 하나를 돌린다. 명령별 한도와 남은 시간 중 작은 값을 쓰고,
+ * 남은 시간이 MIN_COMMAND_MS 미만이면 실행하지 않는다 (notRun). 시간 초과·미실행은 실패로 친다.
+ */
+export function runWithin(cmd, cwd, deadline, perCommandMs, now = Date.now()) {
+  const remaining = deadline - now;
+  if (remaining < MIN_COMMAND_MS) return { ok: false, out: '', timedOut: false, notRun: true, limitMs: 0 };
+  const limitMs = Math.min(perCommandMs, remaining);
+  return { ...run(cmd, cwd, limitMs), notRun: false, limitMs };
+}
+
+/** 실패 보고 한 줄 머리. 시간 초과·미실행을 일반 실패와 다르게 쓴다. */
+export function failureHead(name, cmd, r) {
+  if (r.notRun) return `■ ${name} (\`${cmd}\`) — 훅 시간 한도가 남지 않아 실행하지 않음`;
+  if (r.timedOut) return `■ ${name} (\`${cmd}\`) — ${Math.round(r.limitMs / 1000)}초 안에 끝나지 않음`;
+  return `■ ${name} (\`${cmd}\`)`;
 }
 
 /**

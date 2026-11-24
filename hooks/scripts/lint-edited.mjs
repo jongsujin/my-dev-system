@@ -20,6 +20,6 @@ if (rel.startsWith('..')) process.exit(0);
 const cmd = fileCommand(config.verify.onEdit);
 const r = run(cmd, root, 60_000, { HARNESS_FILE: rel });
 if (!r.ok) {
-  emit({ decision: 'block', reason: `[harness] ${rel} 검사 실패 (\`${config.verify.onEdit}\`)\n${r.out}\n\n이 파일의 문제를 지금 고치세요.` });
+  emit({ decision: 'block', reason: `[harness] ${rel} 검사 실패 (\`${config.verify.onEdit}\`)${r.timedOut ? ' — 60초 안에 끝나지 않음' : ''}\n${r.out}\n\n이 파일의 문제를 지금 고치세요.` });
 }
 process.exit(0);

@@ -5,9 +5,11 @@
 // 같은 세션에서 연속 MAX_BLOCKS 번 막았으면 사용자에게 넘긴다 (무한 루프 방지).
 import { extname } from 'node:path';
 import {
-  baselinePath, changedFiles, counterPath, emit, fileHashes, loadConfig, projectRoot, readInput, readJson,
-  resolveCommands, run, sessionChanges, sha1, skipped, stopDecision, writeJson,
+  STOP_HOOK_DEADLINE_MS, baselinePath, changedFiles, counterPath, emit, failureHead, fileHashes, loadConfig, projectRoot,
+  readInput, readJson, resolveCommands, runWithin, sessionChanges, sha1, skipped, stopDecision, writeJson,
 } from './lib.mjs';
+
+const deadline = Date.now() + STOP_HOOK_DEADLINE_MS;
 
 if (skipped()) process.exit(0);
 const input = await readInput();
@@ -29,8 +31,8 @@ const state = readJson(counterFile) || {};
 const failures = [];
 const failedNames = [];
 for (const { name, cmd } of resolveCommands(config.verify.onStop, config.verify.commands)) {
-  const r = run(cmd, root);
-  if (!r.ok) { failures.push(`■ ${name} (\`${cmd}\`)\n${r.out}`); failedNames.push(name); }
+  const r = runWithin(cmd, root, deadline, config.verify.timeoutSec * 1000);
+  if (!r.ok) { failures.push(`${failureHead(name, cmd, r)}\n${r.out}`); failedNames.push(name); }
 }
 
 // 넘긴 뒤 아무것도 바뀌지 않았는지 알아보기 위한 서명: 대상 파일 해시 + 실패한 검사 이름

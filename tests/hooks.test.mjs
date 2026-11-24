@@ -121,3 +121,12 @@ test('Stop: 3번 막은 뒤 넘기고, 바뀐 게 없으면 다시 막지 않음
   writeFileSync(join(dir, 'a.ts'), '2');
   assert.equal(stop().decision, 'block');
 });
+
+test('검증 명령이 timeoutSec 을 넘기면 시간 초과로 보고', () => {
+  const dir = makeRepo({ verify: { commands: { slow: 'sleep 5' }, onCommit: ['slow'], timeoutSec: 1 } });
+  const t = Date.now();
+  const out = hook('guard.mjs', { cwd: dir, tool_input: { command: 'git commit -m x' } });
+  assert.ok(Date.now() - t < 4000, '한도에서 끊어야 한다');
+  assert.equal(out.hookSpecificOutput.permissionDecision, 'deny');
+  assert.match(out.hookSpecificOutput.permissionDecisionReason, /1초 안에 끝나지 않음/);
+});

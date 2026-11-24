@@ -4,7 +4,9 @@
 import { spawnSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import { checkCommand, isCommit, pushDir, toPlatformVerdict } from './guard-rules.mjs';
-import { PLATFORM, emit, loadConfig, normalizeConfig, projectRoot, readInput, resolveCommands, run, skipped } from './lib.mjs';
+import { COMMIT_HOOK_DEADLINE_MS, PLATFORM, emit, failureHead, loadConfig, normalizeConfig, projectRoot, readInput, resolveCommands, runWithin, skipped } from './lib.mjs';
+
+const deadline = Date.now() + COMMIT_HOOK_DEADLINE_MS;
 
 const input = await readInput();
 const raw = input?.tool_input?.command;
@@ -36,9 +38,9 @@ if (verdict.decision !== 'allow') {
 
 if (config && !skipped() && isCommit(command)) {
   for (const { name, cmd } of resolveCommands(config.verify.onCommit, config.verify.commands)) {
-    const r = run(cmd, root);
+    const r = runWithin(cmd, root, deadline, config.verify.timeoutSec * 1000);
     if (!r.ok) {
-      const reason = `[harness] 커밋 전 검증 실패: ${name} (\`${cmd}\`)\n${r.out}\n\n고친 뒤 다시 커밋하세요.`;
+      const reason = `[harness] 커밋 전 검증 실패\n${failureHead(name, cmd, r)}\n${r.out}\n\n고친 뒤 다시 커밋하세요.`;
       if (config.gates.block) {
         emit({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny', permissionDecisionReason: reason } });
       } else {
