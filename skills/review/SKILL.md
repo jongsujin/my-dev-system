@@ -1,6 +1,6 @@
 ---
 name: review
-description: 현재 브랜치의 변경을 보안·품질·프론트엔드(Toss 4축)·컨벤션·테스트 5개 리뷰어 서브에이전트로 병렬 리뷰하고, critical/major/minor 로 정리한 리포트를 만든다. "리뷰해줘", "PR 올리기 전에 봐줘", "코드 검토" 같은 요청이나 커밋·PR 직전에 쓴다.
+description: 현재 브랜치의 변경을 보안·품질·백엔드·프론트엔드(Toss 4축)·컨벤션·테스트 6개 리뷰어 서브에이전트로 병렬 리뷰하고, critical/major/minor 로 정리한 리포트를 만든다. "리뷰해줘", "PR 올리기 전에 봐줘", "코드 검토" 같은 요청이나 커밋·PR 직전에 쓴다.
 ---
 
 # 병렬 코드 리뷰
@@ -17,12 +17,13 @@ description: 현재 브랜치의 변경을 보안·품질·프론트엔드(Toss 
 
 ## 2. 리뷰어 고르기
 
-기본은 `.harness.json`의 `review.reviewers` (없으면 다섯 개 전부). 인자 `--only <이름>` / `--skip <이름>` 을 반영한다.
+기본은 `.harness.json`의 `review.reviewers` (없으면 여섯 개 전부). 인자 `--only <이름>` / `--skip <이름>` 을 반영한다.
 
 | 리뷰어 | 서브에이전트 | 건너뛰는 조건 |
 |---|---|---|
 | security | `reviewer-security` | 없음 |
 | quality | `reviewer-quality` | 문서·설정 파일만 바뀜 |
+| backend | `reviewer-backend` | 서버 코드(API 라우트·서비스·DB 접근·작업 큐) 변경 없음 |
 | frontend | `reviewer-frontend` | `.tsx .jsx .vue .svelte` 및 UI 폴더 변경 없음 |
 | convention | `reviewer-convention` | 없음 (규칙 문서가 없으면 리뷰어가 스스로 skipped) |
 | test | `reviewer-test` | 문서만 바뀜 |

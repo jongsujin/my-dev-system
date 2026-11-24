@@ -18,7 +18,7 @@
   },
   "review": {
     "base": "main",
-    "reviewers": ["security", "quality", "frontend", "convention", "test"]
+    "reviewers": ["security", "quality", "backend", "frontend", "convention", "test"]
   },
   "context": {
     "rules": ["typescript", "react"],

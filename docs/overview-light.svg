@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 530" width="960" height="530" role="img" aria-labelledby="t d">
+<title id="t">my-harness 개요</title>
+<desc id="d">훅 다섯 지점(세션 시작, 명령 실행 전, 파일 편집 직후, 커밋 직전, 응답 종료 전), 병렬 리뷰 스킬의 리뷰어 6개, 교훈이 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 설정 파일.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#59636e"/></marker></defs>
+<text x="20" y="30" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">작업 중 자동으로 실행되는 훅</text>
+<circle cx="694" cy="25" r="5" fill="#0969da"/>
+<text x="705" y="30" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="start">읽힌다</text>
+<circle cx="778" cy="25" r="5" fill="#cf222e"/>
+<text x="789" y="30" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="start">막는다</text>
+<circle cx="862" cy="25" r="5" fill="#1a7f37"/>
+<text x="873" y="30" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="start">검사한다</text>
+<rect x="20" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<rect x="21" y="45" width="166" height="4" rx="2" fill="#0969da"/>
+<text x="104" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">세션 시작</text>
+<text x="104" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">규칙·교훈 주입</text>
+<text x="104" y="124" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">공통·스택 규칙과</text>
+<text x="104" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">레포 교훈 상위 6개</text>
+<line x1="191" y1="103" x2="204" y2="103" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="208" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<rect x="209" y="45" width="166" height="4" rx="2" fill="#cf222e"/>
+<text x="292" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">명령 실행 전</text>
+<text x="292" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">위험 명령 차단</text>
+<text x="292" y="124" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">rm -rf ~ · 강제 푸시</text>
+<text x="292" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">main 푸시·reset은 확인</text>
+<line x1="379" y1="103" x2="392" y2="103" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="396" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<rect x="397" y="45" width="166" height="4" rx="2" fill="#1a7f37"/>
+<text x="480" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">파일 편집 직후</text>
+<text x="480" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">고친 파일만 검사</text>
+<text x="480" y="124" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">verify.onEdit</text>
+<text x="480" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">예: ESLint</text>
+<line x1="567" y1="103" x2="580" y2="103" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="584" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<rect x="585" y="45" width="166" height="4" rx="2" fill="#1a7f37"/>
+<text x="668" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">커밋 직전</text>
+<text x="668" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">커밋 게이트</text>
+<text x="668" y="124" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">verify.onCommit</text>
+<text x="668" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">실패하면 커밋 차단</text>
+<line x1="755" y1="103" x2="768" y2="103" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="772" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<rect x="773" y="45" width="166" height="4" rx="2" fill="#1a7f37"/>
+<text x="856" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">응답 종료 전</text>
+<text x="856" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">완료 게이트</text>
+<text x="856" y="124" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">verify.onStop</text>
+<text x="856" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">3회 실패 시 사용자에게</text>
+<text x="20" y="226" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">요청하면 실행되는 스킬</text>
+<rect x="20" y="240" width="560" height="190" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="36" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">병렬 리뷰</text>
+<text x="564" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="end">“PR 올리기 전에 리뷰해줘”</text>
+<rect x="41" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="80" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">보안</text>
+<line x1="80" y1="322" x2="80" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="129" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="168" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">품질</text>
+<line x1="168" y1="322" x2="168" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="217" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="256" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">백엔드</text>
+<line x1="256" y1="322" x2="256" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="305" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="344" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">프론트엔드</text>
+<line x1="344" y1="322" x2="344" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="393" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="432" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">컨벤션</text>
+<line x1="432" y1="322" x2="432" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="481" y="290" width="78" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="520" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#1f2328" text-anchor="middle">테스트</text>
+<line x1="520" y1="322" x2="520" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<line x1="80" y1="340" x2="520" y2="340" stroke="#d0d7de" stroke-width="1.5"/>
+<line x1="300" y1="340" x2="300" y2="364" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="150" y="368" width="300" height="42" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+<text x="300" y="394" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">통합 리포트 · critical / major / minor</text>
+<rect x="600" y="240" width="340" height="190" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="616" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">교훈 승격</text>
+<text x="924" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="end">“다음부터 이렇게 해”</text>
+<rect x="610" y="290" width="72" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="646" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">메모</text>
+<text x="646" y="342" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#59636e" text-anchor="middle">lessons.md</text>
+<rect x="734" y="290" width="72" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
+<text x="770" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">규칙</text>
+<text x="770" y="342" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" font-weight="400" fill="#59636e" text-anchor="middle">AGENTS.md</text>
+<line x1="686" y1="306" x2="729" y2="306" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="708" y="284" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="11" font-weight="400" fill="#59636e" text-anchor="middle">2회 반복</text>
+<rect x="858" y="290" width="72" height="32" rx="16" fill="#ffffff" stroke="#1a7f37"/>
+<text x="894" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1a7f37" text-anchor="middle">훅</text>
+<text x="894" y="342" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="11" font-weight="400" fill="#59636e" text-anchor="middle">차단·검사</text>
+<line x1="810" y1="306" x2="853" y2="306" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text x="832" y="284" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="11" font-weight="400" fill="#59636e" text-anchor="middle">3회 반복</text>
+<text x="770" y="390" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="middle">반복되는 실수는</text>
+<text x="770" y="410" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">기계가 지키게 한다</text>
+<rect x="20" y="450" width="920" height="60" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+<text x="36" y="476" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">.harness.json</text>
+<text x="160" y="476" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="400" fill="#1f2328" text-anchor="start">프로젝트마다 검사 명령·리뷰어·규칙 묶음을 고른다</text>
+<text x="36" y="496" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="start">“이 레포 온보딩해줘”, “새 프로젝트 만들자”로 초안을 만든다. 없으면 규칙 주입과 위험 명령 차단만 동작한다.</text>
+</svg>

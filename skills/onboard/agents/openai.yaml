@@ -1,0 +1,6 @@
+interface:
+  display_name: "프로젝트 온보딩"
+  short_description: "기존 레포를 파악하고 하네스 설정 초안을 제안"
+  default_prompt: "Use $onboard to map this repository and propose .harness.json and AGENTS.md."
+policy:
+  allow_implicit_invocation: true

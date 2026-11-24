@@ -15,6 +15,14 @@ test('에이전트 → Codex 역할', () => {
   assert.doesNotMatch(r.toml, /^model\s*=/m);
 });
 
+test('reviewer-backend 도 Codex 역할로 변환', () => {
+  const r = toCodexRole(readFileSync(new URL('../agents/reviewer-backend.md', import.meta.url), 'utf8'));
+  assert.equal(r.name, 'harness_reviewer_backend');
+  assert.equal(r.file, 'harness-reviewer-backend.toml');
+  assert.match(r.toml, /sandbox_mode = "read-only"/);
+  assert.match(r.toml, /당신은 백엔드 설계 리뷰어/);
+});
+
 test('config.toml 블록은 교체·제거가 멱등', () => {
   const base = 'model = "x"\n\n[features]\na = true\n';
   const block = configBlock([toCodexRole(md)]);

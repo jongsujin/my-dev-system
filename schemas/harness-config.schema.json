@@ -31,13 +31,13 @@
       "type": "object",
       "properties": {
         "base": { "type": "string" },
-        "reviewers": { "type": "array", "items": { "enum": ["security", "quality", "frontend", "convention", "test"] } }
+        "reviewers": { "type": "array", "items": { "enum": ["security", "quality", "backend", "frontend", "convention", "test"] } }
       }
     },
     "context": {
       "type": "object",
       "properties": {
-        "rules": { "type": "array", "items": { "type": "string" }, "description": "rules/ 아래 주입할 폴더 (common 은 항상)" },
+        "rules": { "type": "array", "items": { "type": "string" }, "description": "rules/ 아래 주입할 폴더 (common 은 항상). 예: typescript, react, backend" },
         "maxLessons": { "type": "integer", "minimum": 0 }
       }
     }
