@@ -130,3 +130,42 @@ test('검증 명령이 timeoutSec 을 넘기면 시간 초과로 보고', () => 
   assert.equal(out.hookSpecificOutput.permissionDecision, 'deny');
   assert.match(out.hookSpecificOutput.permissionDecisionReason, /1초 안에 끝나지 않음/);
 });
+
+const COMMIT_CONFIG = { verify: { commands: { check: 'false' }, onCommit: ['check'] } };
+const pre = (dir, command, env) => hook('guard.mjs', { cwd: dir, tool_input: { command } }, env);
+
+test('커밋 게이트: 우회 형태도 검증을 돌려 막는다', () => {
+  const dir = makeRepo(COMMIT_CONFIG);
+  for (const c of ['git commit -m x', 'git -C . commit -m x', 'git commit -m "fix --dry-run 처리"']) {
+    const out = pre(dir, c);
+    assert.equal(out?.hookSpecificOutput?.permissionDecision, 'deny', c);
+    assert.match(out.hookSpecificOutput.permissionDecisionReason, /커밋 전 검증 실패/, c);
+  }
+});
+
+test('커밋 게이트: 커밋이 아닌 명령은 대상이 아니다', () => {
+  const dir = makeRepo(COMMIT_CONFIG);
+  for (const c of ['echo "git commit"', 'git log --grep commit', 'git commit --dry-run']) assert.equal(pre(dir, c), null, c);
+});
+
+test('커밋 게이트: gates.block false 면 안내만', () => {
+  const dir = makeRepo({ ...COMMIT_CONFIG, gates: { block: false } });
+  const out = pre(dir, 'git commit -m x');
+  assert.equal(out.hookSpecificOutput, undefined);
+  assert.match(out.systemMessage, /커밋 전 검증 실패/);
+});
+
+test('guard: 현재 브랜치가 보호 브랜치면 리프스펙 없는 푸시도 확인', () => {
+  const dir = makeRepo();
+  assert.equal(pre(dir, 'git push').hookSpecificOutput.permissionDecision, 'ask');
+  git(dir, 'switch', '-q', '-c', 'feat/x');
+  assert.equal(pre(dir, 'git push'), null);
+});
+
+test('Codex 모드는 ask 를 deny 로', () => {
+  const dir = makeRepo();
+  const out = pre(dir, 'git reset --hard', { HARNESS_PLATFORM: 'codex' });
+  assert.equal(out.hookSpecificOutput.permissionDecision, 'deny');
+  assert.match(out.hookSpecificOutput.permissionDecisionReason, /직접 실행할지/);
+  assert.equal(pre(dir, 'git reset --hard').hookSpecificOutput.permissionDecision, 'ask');
+});
