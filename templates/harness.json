@@ -7,7 +7,8 @@
     },
     "onEdit": "npx --no-install eslint {file}",
     "onStop": ["lint", "typecheck"],
-    "onCommit": ["typecheck"]
+    "onCommit": ["typecheck"],
+    "timeoutSec": 180
   },
   "gates": { "block": true },
   "guard": {

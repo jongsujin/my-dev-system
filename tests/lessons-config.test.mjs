@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
-import { normalizeConfig, resolveCommands } from '../hooks/scripts/lib.mjs';
+import { MAX_BLOCKS, MIN_COMMAND_MS, failureHead, normalizeConfig, runWithin, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
 
 const MD = `# 교훈
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->
@@ -39,4 +39,51 @@ test('설정 기본값', () => {
 
 test('명령 이름 해석: 없는 이름은 건너뜀', () => {
   assert.deepEqual(resolveCommands(['lint', 'nope', 'test'], { lint: 'npm run lint', test: ' ' }), [{ name: 'lint', cmd: 'npm run lint' }]);
+});
+
+test('잘못된 형식도 던지지 않는다', () => {
+  const c = normalizeConfig({ verify: { onStop: 'lint', onCommit: 3, commands: [] } });
+  assert.deepEqual(c.verify.onStop, ['lint']);
+  assert.deepEqual(c.verify.onCommit, []);
+  assert.deepEqual(c.verify.commands, {});
+  assert.deepEqual(resolveCommands('lint', { lint: 'x' }), []);
+});
+
+test('정의되지 않은 명령 이름', () => {
+  const verify = { commands: { lint: 'npm run lint', empty: ' ' }, onStop: ['lint', 'typechek'], onCommit: ['empty', 'lint'] };
+  assert.deepEqual(unknownCommandNames(verify), { onStop: ['typechek'], onCommit: ['empty'] });
+  assert.deepEqual(unknownCommandNames({ onStop: 'x' }), { onStop: ['x'], onCommit: [] });
+  assert.deepEqual(unknownCommandNames(undefined), { onStop: [], onCommit: [] });
+});
+
+test('세션 변경 파일: 기준선과 비교', () => {
+  const cur = { 'a.ts': 'h1', 'b.ts': 'h2', 'c.ts': 'deleted' };
+  assert.deepEqual(sessionChanges(cur, null), ['a.ts', 'b.ts', 'c.ts']);
+  assert.deepEqual(sessionChanges(cur, { 'a.ts': 'h1', 'b.ts': 'old', 'c.ts': 'deleted' }), ['b.ts']);
+  assert.deepEqual(sessionChanges(cur, {}), ['a.ts', 'b.ts', 'c.ts']);
+  assert.deepEqual(sessionChanges({}, { 'a.ts': 'h1' }), []);
+});
+
+test('Stop 결정: 3번 막고 넘긴 뒤 바뀐 게 없으면 다시 막지 않음', () => {
+  let state = {};
+  const step = (sig, failed = true, block = true) => { const r = stopDecision(state, { failed, block, signature: sig }); state = r.next; return r.action; };
+  for (let i = 0; i < MAX_BLOCKS; i++) assert.equal(step('s1'), 'block');
+  assert.equal(step('s1'), 'handoff');
+  assert.equal(step('s1'), 'repeat');
+  assert.equal(step('s1'), 'repeat');
+  assert.equal(step('s2'), 'block');
+  assert.equal(step('s2', false), 'pass');
+  assert.equal(step('s3', true, false), 'advisory');
+});
+
+test('시간 한도: 기본값과 남은 시간 부족', () => {
+  assert.equal(normalizeConfig({}).verify.timeoutSec, 180);
+  assert.equal(normalizeConfig({ verify: { timeoutSec: 30 } }).verify.timeoutSec, 30);
+  assert.equal(normalizeConfig({ verify: { timeoutSec: '30' } }).verify.timeoutSec, 180);
+  const now = 1_000_000;
+  const r = runWithin('true', '.', now + MIN_COMMAND_MS - 1, 180_000, now);
+  assert.equal(r.notRun, true);
+  assert.equal(r.ok, false);
+  assert.match(failureHead('lint', 'npm run lint', r), /실행하지 않음/);
+  assert.match(failureHead('lint', 'x', { timedOut: true, limitMs: 2000 }), /2초 안에 끝나지 않음/);
 });
