@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // PreToolUse(Bash): 위험 명령 차단 + 커밋 전 검증 게이트.
 // 차단 판단은 .harness.json 이 없어도 항상 동작한다. 커밋 게이트는 설정이 있을 때만.
-import { checkCommand, isCommit, toPlatformVerdict } from './guard-rules.mjs';
+import { spawnSync } from 'node:child_process';
+import { resolve } from 'node:path';
+import { checkCommand, isCommit, pushDir, toPlatformVerdict } from './guard-rules.mjs';
 import { PLATFORM, emit, loadConfig, normalizeConfig, projectRoot, readInput, resolveCommands, run, skipped } from './lib.mjs';
 
 const input = await readInput();
@@ -11,7 +13,14 @@ if (!command) process.exit(0);
 
 const root = projectRoot(input.cwd);
 const config = loadConfig(root);
-const guard = (config || normalizeConfig()).guard;
+const guard = { ...(config || normalizeConfig()).guard };
+
+// 리프스펙 없는 git push 는 현재 브랜치로 판단해야 해서, push 가 있을 때만 git 을 부른다.
+const dir = pushDir(command);
+if (dir !== undefined) {
+  const r = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { cwd: resolve(input.cwd || process.cwd(), dir || '.'), encoding: 'utf8' });
+  if (r.status === 0) guard.currentBranch = r.stdout.trim();
+}
 
 const verdict = toPlatformVerdict(checkCommand(command, guard), PLATFORM);
 if (verdict.decision !== 'allow') {
