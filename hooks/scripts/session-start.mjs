@@ -3,7 +3,7 @@
 // 주입량은 MAX_CHARS 로 제한한다 (컨텍스트를 아끼기 위해).
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { CONFIG_FILE, PLUGIN_ROOT, emit, loadConfigState, projectRoot, readInput, unknownCommandNames } from './lib.mjs';
+import { CONFIG_FILE, PLUGIN_ROOT, baselinePath, changedFiles, emit, fileHashes, loadConfigState, projectRoot, readInput, unknownCommandNames, writeJson } from './lib.mjs';
 import { topLessons } from './lessons.mjs';
 
 const MAX_CHARS = 8000;
@@ -12,6 +12,18 @@ const input = await readInput();
 const root = projectRoot(input.cwd);
 const state = loadConfigState(root);
 const config = state.status === 'ok' ? state.config : null;
+
+// 완료 전 검증이 "세션 전부터 바뀌어 있던 파일" 때문에 매번 막지 않도록, 지금 바뀐 파일의 해시를 기준선으로 남긴다.
+// 새 세션(startup/clear)에만 쓰고, resume/compact 는 기존 기준선을 유지한다.
+// source 가 없으면(플랫폼 차이) 기준선이 없을 때만 쓴다. 실패해도 세션 시작은 막지 않는다.
+try {
+  const source = input.source;
+  const p = baselinePath(input.session_id);
+  const fresh = source === 'startup' || source === 'clear' || (!source && !existsSync(p));
+  if (input.session_id && config && config.verify.onStop.length && fresh) {
+    writeJson(p, { root, files: fileHashes(root, changedFiles(root)) });
+  }
+} catch { /* 기준선 없이도 동작한다 (전체 작업 트리 기준으로 돌아감) */ }
 
 function readRules(set) {
   const dir = join(PLUGIN_ROOT, 'rules', set);

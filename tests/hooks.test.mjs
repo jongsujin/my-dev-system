@@ -5,10 +5,16 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { fileCommand } from '../hooks/scripts/lib.mjs';
+import { baselinePath, counterPath, fileCommand } from '../hooks/scripts/lib.mjs';
 
 const SCRIPTS = new URL('../hooks/scripts/', import.meta.url).pathname;
 const cleanup = [];
+/** 세션 id 마다 tmpdir 의 기준선·카운터 파일도 지운다. */
+export function sid(name) {
+  const id = `test-${process.pid}-${name}`;
+  cleanup.push(baselinePath(id), counterPath(id));
+  return id;
+}
 after(() => { for (const p of cleanup) rmSync(p, { recursive: true, force: true }); });
 
 function git(cwd, ...args) {
@@ -73,4 +79,45 @@ test('SessionStart: 깨진 설정은 깨졌다고, 없는 이름은 경고로', 
   const typo = makeRepo({ verify: { commands: { typecheck: 'true' }, onCommit: ['typechek'] } });
   const b = hook('session-start.mjs', { cwd: typo, session_id: 'e-typo', source: 'startup' }).hookSpecificOutput.additionalContext;
   assert.match(b, /verify\.onCommit 의 \[typechek\]/);
+});
+
+const STOP_CONFIG = { verify: { commands: { check: 'test ! -f FAIL' }, onStop: ['check'] } };
+
+test('Stop: 기준선 이전부터 바뀐 파일은 무시하고, 세션 중 바뀐 파일에만 반응', () => {
+  const dir = makeRepo(STOP_CONFIG);
+  const id = sid('baseline');
+  writeFileSync(join(dir, 'old.ts'), 'dirty before');
+  writeFileSync(join(dir, 'FAIL'), '');
+  hook('session-start.mjs', { cwd: dir, session_id: id, source: 'startup' });
+  assert.equal(hook('verify-stop.mjs', { cwd: dir, session_id: id }), null, '세션 전부터 더러운 파일만 있으면 통과');
+
+  writeFileSync(join(dir, 'old.ts'), 'edited in session');
+  assert.equal(hook('verify-stop.mjs', { cwd: dir, session_id: id }).decision, 'block');
+
+  // resume 은 기준선을 다시 만들지 않는다
+  hook('session-start.mjs', { cwd: dir, session_id: id, source: 'resume' });
+  assert.equal(hook('verify-stop.mjs', { cwd: dir, session_id: id }).decision, 'block');
+});
+
+test('Stop: 기준선이 없으면 작업 트리 전체 기준', () => {
+  const dir = makeRepo(STOP_CONFIG);
+  writeFileSync(join(dir, 'old.ts'), 'x');
+  writeFileSync(join(dir, 'FAIL'), '');
+  assert.equal(hook('verify-stop.mjs', { cwd: dir, session_id: sid('nobase') }).decision, 'block');
+});
+
+test('Stop: 3번 막은 뒤 넘기고, 바뀐 게 없으면 다시 막지 않음', () => {
+  const dir = makeRepo(STOP_CONFIG);
+  const id = sid('handoff');
+  writeFileSync(join(dir, 'FAIL'), '');
+  hook('session-start.mjs', { cwd: dir, session_id: id, source: 'startup' });
+  writeFileSync(join(dir, 'a.ts'), '1');
+  const stop = () => hook('verify-stop.mjs', { cwd: dir, session_id: id });
+  for (let i = 0; i < 3; i++) assert.equal(stop().decision, 'block');
+  assert.match(stop().systemMessage, /사용자에게 넘깁니다/);
+  const again = stop();
+  assert.equal(again.decision, undefined);
+  assert.match(again.systemMessage, /다시 막지 않습니다/);
+  writeFileSync(join(dir, 'a.ts'), '2');
+  assert.equal(stop().decision, 'block');
 });

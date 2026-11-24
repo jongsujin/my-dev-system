@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
-import { normalizeConfig, resolveCommands, unknownCommandNames } from '../hooks/scripts/lib.mjs';
+import { MAX_BLOCKS, normalizeConfig, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
 
 const MD = `# 교훈
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->
@@ -54,4 +54,24 @@ test('정의되지 않은 명령 이름', () => {
   assert.deepEqual(unknownCommandNames(verify), { onStop: ['typechek'], onCommit: ['empty'] });
   assert.deepEqual(unknownCommandNames({ onStop: 'x' }), { onStop: ['x'], onCommit: [] });
   assert.deepEqual(unknownCommandNames(undefined), { onStop: [], onCommit: [] });
+});
+
+test('세션 변경 파일: 기준선과 비교', () => {
+  const cur = { 'a.ts': 'h1', 'b.ts': 'h2', 'c.ts': 'deleted' };
+  assert.deepEqual(sessionChanges(cur, null), ['a.ts', 'b.ts', 'c.ts']);
+  assert.deepEqual(sessionChanges(cur, { 'a.ts': 'h1', 'b.ts': 'old', 'c.ts': 'deleted' }), ['b.ts']);
+  assert.deepEqual(sessionChanges(cur, {}), ['a.ts', 'b.ts', 'c.ts']);
+  assert.deepEqual(sessionChanges({}, { 'a.ts': 'h1' }), []);
+});
+
+test('Stop 결정: 3번 막고 넘긴 뒤 바뀐 게 없으면 다시 막지 않음', () => {
+  let state = {};
+  const step = (sig, failed = true, block = true) => { const r = stopDecision(state, { failed, block, signature: sig }); state = r.next; return r.action; };
+  for (let i = 0; i < MAX_BLOCKS; i++) assert.equal(step('s1'), 'block');
+  assert.equal(step('s1'), 'handoff');
+  assert.equal(step('s1'), 'repeat');
+  assert.equal(step('s1'), 'repeat');
+  assert.equal(step('s2'), 'block');
+  assert.equal(step('s2', false), 'pass');
+  assert.equal(step('s3', true, false), 'advisory');
 });
