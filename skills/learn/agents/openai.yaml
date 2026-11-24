@@ -1,0 +1,6 @@
+interface:
+  display_name: "교훈 기록"
+  short_description: "교정받은 것을 교훈으로 기록하고 승격을 제안"
+  default_prompt: "Use $learn to record what I corrected in this session as a lesson."
+policy:
+  allow_implicit_invocation: true

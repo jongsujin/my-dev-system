@@ -25,6 +25,8 @@ codex plugin list                                     # harness@my-harness  inst
 
 플러그인은 스킬 네 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 훅 내용이 바뀌면 다시 묻는다.
 
+스킬마다 `skills/<이름>/agents/openai.yaml`에 Codex용 표시 이름·설명·기본 프롬프트·암묵 호출 정책을 둔다(`new-project`는 명시 호출만). Claude Code는 이 파일을 무시한다.
+
 Codex 플러그인은 서브에이전트를 설치하지 않는다. 리뷰어를 Codex 역할로 쓰려면 저장소 사본에서 변환 스크립트를 실행한다.
 
 ```bash

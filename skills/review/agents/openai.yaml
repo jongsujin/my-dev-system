@@ -1,0 +1,6 @@
+interface:
+  display_name: "병렬 코드 리뷰"
+  short_description: "6개 관점 리뷰어로 브랜치 변경을 병렬 리뷰"
+  default_prompt: "Use $review to review the changes on my current branch before I open a PR."
+policy:
+  allow_implicit_invocation: true
