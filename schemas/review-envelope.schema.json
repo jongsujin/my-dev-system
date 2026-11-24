@@ -5,7 +5,7 @@
   "type": "object",
   "required": ["reviewer", "summary", "findings"],
   "properties": {
-    "reviewer": { "enum": ["security", "quality", "frontend", "convention", "test"] },
+    "reviewer": { "enum": ["security", "quality", "backend", "frontend", "convention", "test"] },
     "summary": { "type": "string", "description": "한두 문장 요약. 발견 없으면 무엇을 봤는지." },
     "skipped": { "type": "boolean", "description": "담당 파일이 없어 검토하지 않았으면 true" },
     "findings": {
@@ -15,7 +15,7 @@
         "required": ["severity", "category", "file", "title", "evidence", "why", "fix", "verified"],
         "properties": {
           "severity": { "enum": ["critical", "major", "minor"] },
-          "category": { "type": "string", "description": "kebab-case. 예: auth-bypass, n-plus-one, named-condition" },
+          "category": { "type": "string", "description": "kebab-case. 예: auth-bypass, non-idempotent-write, n-plus-one, named-condition" },
           "file": { "type": "string" },
           "line": { "type": "integer" },
           "title": { "type": "string" },

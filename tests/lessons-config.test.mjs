@@ -32,7 +32,7 @@ test('설정 기본값', () => {
   const c = normalizeConfig({});
   assert.equal(c.gates.block, true);
   assert.deepEqual(c.guard.protectedBranches, ['main', 'master']);
-  assert.equal(c.review.reviewers.length, 5);
+  assert.deepEqual(c.review.reviewers, ['security', 'quality', 'backend', 'frontend', 'convention', 'test']);
   assert.equal(normalizeConfig({ gates: { block: false } }).gates.block, false);
   assert.equal(normalizeConfig({ context: { maxLessons: 0 } }).context.maxLessons, 0);
 });

@@ -75,7 +75,7 @@ export function normalizeConfig(raw = {}) {
     },
     review: {
       base: raw.review?.base || 'main',
-      reviewers: raw.review?.reviewers || ['security', 'quality', 'frontend', 'convention', 'test'],
+      reviewers: raw.review?.reviewers || ['security', 'quality', 'backend', 'frontend', 'convention', 'test'],
     },
     context: {
       rules: raw.context?.rules || ['common'],

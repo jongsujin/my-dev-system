@@ -37,6 +37,7 @@ description: 처음 합류한 기존 프로젝트를 파악하고 하네스를 �
    - `onCommit`: 타입 검사
    - 베이스라인이 빨간 명령은 넣지 않거나 `gates.block: false`(안내 모드)로 시작한다고 제안한다
    - `context.rules`: 스택에 맞게 (`typescript`, `react` 등)
+   - 서버 코드가 있으면 `context.rules`에 `"backend"`를 넣는다
    - `guard.deny`: 위험 영역에서 찾은 운영 접속 문자열 패턴 (예: 운영 DB 호스트)
 3. **`AGENTS.md`**: 레포에 없으면 플러그인 `templates/AGENTS.md`를 채워 제안. 있으면 빠진 항목(명령·금지 사항)만 제안. Claude Code용 `CLAUDE.md`에는 `@AGENTS.md` 한 줄.
 

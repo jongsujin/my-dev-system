@@ -57,7 +57,7 @@ Claude Code와 달라지는 점:
 }
 ```
 
-이 설정으로 Claude Code가 기본 검사 대상인 JS·TS·Vue 계열 파일을 변경한 뒤 응답을 끝내면 테스트가 실행된다. Claude Code의 Bash 도구로 커밋할 때도 테스트가 실행되며, 실패하면 커밋을 막는다. 프로젝트의 린트·타입 검사까지 연결하려면 실제 스크립트 이름에 맞춰 템플릿을 수정한다. [전체 설정 예시](templates/harness.json) · [설정 스키마](schemas/harness-config.schema.json)
+이 설정으로 Claude Code가 기본 검사 대상인 JS·TS·Vue 계열 파일을 변경한 뒤 응답을 끝내면 테스트가 실행된다. Claude Code의 Bash 도구로 커밋할 때도 테스트가 실행되며, 실패하면 커밋을 막는다. 프로젝트의 린트·타입 검사까지 연결하려면 실제 스크립트 이름에 맞춰 템플릿을 수정한다. 템플릿의 `context.rules`는 프론트엔드 예시다. 서버 코드가 있으면 `backend`를 더한다. [전체 설정 예시](templates/harness.json) · [설정 스키마](schemas/harness-config.schema.json)
 
 ## 훅이 실행되는 시점
 
@@ -79,7 +79,7 @@ Claude Code와 달라지는 점:
 | --- | --- |
 | “이 레포 온보딩해줘” | 기존 프로젝트에서 확인한 명령과 위험 영역을 바탕으로 온보딩 문서, `.harness.json`, `AGENTS.md` 초안을 제안한다. |
 | “새 프로젝트 만들자” | 요구사항과 스택을 정한 뒤 린트·타입 검사·테스트·CI를 갖춘 골격과 첫 기능을 만든다. |
-| “PR 올리기 전에 리뷰해줘” | 보안·품질·프론트엔드·프로젝트 규칙·테스트 중 변경에 맞는 관점으로 리뷰한다. 결과는 `.harness/reviews/`에 저장한다. |
+| “PR 올리기 전에 리뷰해줘” | 보안·품질·백엔드·프론트엔드·프로젝트 규칙·테스트 중 변경에 맞는 관점으로 리뷰한다. 결과는 `.harness/reviews/`에 저장한다. |
 | “다음부터 이 방식으로 해줘. 기억해” | `.harness/lessons.md`에 교훈을 기록하고, 반복된 항목을 규칙이나 훅으로 옮길지 제안한다. |
 
 리뷰 기준 브랜치의 기본값은 `main`이다. 프로젝트별로 `review.base`와 `review.reviewers`를 바꿀 수 있다. 각 리뷰어는 파일 위치, 근거, 영향과 수정 방향을 같은 형식으로 반환한다. [스킬 정의](skills/) · [에이전트 정의](agents/) · [리뷰 결과 스키마](schemas/review-envelope.schema.json)
