@@ -1,7 +1,7 @@
 // .harness/lessons.md 형식 파서. 순수 함수 (tests/lessons.test.mjs).
 //
-// 한 줄에 교훈 하나:
-//   - [×3] 교훈 내용 <!-- level:rule updated:2026-11-23 -->
+// 한 줄에 항목 하나:
+//   - [×3] 노트 내용 <!-- level:rule updated:2026-11-23 -->
 // ×N 은 반복 횟수. level 은 memo | rule | hook (승격 사다리 위치).
 
 const LINE = /^\s*-\s*\[×(\d+)\]\s*(.+?)\s*(?:<!--\s*(.*?)\s*-->)?\s*$/;
@@ -15,7 +15,7 @@ export function parseLessons(md) {
   }).filter(Boolean);
 }
 
-/** 이미 훅으로 승격된 교훈은 기계가 지키므로 주입하지 않는다. */
+/** 이미 훅으로 승격된 작업 노트는 기계가 지키므로 주입하지 않는다. */
 export function topLessons(md, n) {
   return parseLessons(md)
     .filter(l => l.level !== 'hook')

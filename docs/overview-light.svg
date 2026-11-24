@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 530" width="960" height="530" role="img" aria-labelledby="t d">
 <title id="t">my-harness 개요</title>
-<desc id="d">훅 다섯 지점(세션 시작, 명령 실행 전, 파일 편집 직후, 커밋 직전, 응답 종료 전), 병렬 리뷰 스킬의 리뷰어 6개, 교훈이 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 설정 파일.</desc>
+<desc id="d">훅 다섯 지점(세션 시작, 명령 실행 전, 파일 편집 직후, 커밋 직전, 응답 종료 전), 병렬 리뷰 스킬의 리뷰어 6개, 작업 노트가 메모에서 규칙과 훅으로 승격되는 과정, 프로젝트별 설정 파일.</desc>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#59636e"/></marker></defs>
 <text x="20" y="30" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">작업 중 자동으로 실행되는 훅</text>
 <circle cx="694" cy="25" r="5" fill="#0969da"/>
@@ -12,9 +12,9 @@
 <rect x="20" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
 <rect x="21" y="45" width="166" height="4" rx="2" fill="#0969da"/>
 <text x="104" y="74" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">세션 시작</text>
-<text x="104" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">규칙·교훈 주입</text>
+<text x="104" y="98" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="15" font-weight="600" fill="#1f2328" text-anchor="middle">규칙·작업 노트 주입</text>
 <text x="104" y="124" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">공통·스택 규칙과</text>
-<text x="104" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">레포 교훈 상위 6개</text>
+<text x="104" y="142" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="middle">레포 작업 노트 상위 6개</text>
 <line x1="191" y1="103" x2="204" y2="103" stroke="#59636e" stroke-width="1.5" marker-end="url(#arrow)"/>
 <rect x="208" y="44" width="168" height="118" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
 <rect x="209" y="45" width="166" height="4" rx="2" fill="#cf222e"/>
@@ -70,7 +70,7 @@
 <rect x="150" y="368" width="300" height="42" rx="8" fill="#ffffff" stroke="#d0d7de"/>
 <text x="300" y="394" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">통합 리포트 · critical / major / minor</text>
 <rect x="600" y="240" width="340" height="190" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
-<text x="616" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">교훈 승격</text>
+<text x="616" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="14" font-weight="600" fill="#1f2328" text-anchor="start">작업 노트 승격</text>
 <text x="924" y="268" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="12" font-weight="400" fill="#59636e" text-anchor="end">“다음부터 이렇게 해”</text>
 <rect x="610" y="290" width="72" height="32" rx="16" fill="#ffffff" stroke="#d0d7de"/>
 <text x="646" y="311" font-family="system-ui, -apple-system, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">메모</text>
