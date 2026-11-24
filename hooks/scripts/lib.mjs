@@ -26,24 +26,43 @@ export function projectRoot(cwd) {
   return r.status === 0 ? r.stdout.trim() : base;
 }
 
+/**
+ * .harness.json 상태. 없음과 깨짐을 구분해야 세션 시작에서 "파일이 없다"고 잘못 안내하지 않는다.
+ * @returns {{status: 'missing'} | {status: 'broken', error: string} | {status: 'ok', config: object}}
+ */
+export function loadConfigState(root) {
+  const p = join(root, CONFIG_FILE);
+  if (!existsSync(p)) return { status: 'missing' };
+  try {
+    const raw = JSON.parse(readFileSync(p, 'utf8'));
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { status: 'broken', error: '최상위 값이 객체가 아닙니다' };
+    return { status: 'ok', config: normalizeConfig(raw) };
+  } catch (e) {
+    return { status: 'broken', error: e?.message || String(e) };
+  }
+}
+
 /** .harness.json 을 읽는다. 없거나 깨졌으면 null (게이트 비활성). */
 export function loadConfig(root) {
-  const p = join(root, CONFIG_FILE);
-  if (!existsSync(p)) return null;
-  try { return normalizeConfig(JSON.parse(readFileSync(p, 'utf8'))); } catch { return null; }
+  const s = loadConfigState(root);
+  return s.status === 'ok' ? s.config : null;
 }
+
+const isObj = x => !!x && typeof x === 'object' && !Array.isArray(x);
+/** 문자열 하나는 목록 하나로 받아 주고, 그 밖의 잘못된 형식은 빈 목록. */
+const names = x => (typeof x === 'string' ? [x] : Array.isArray(x) ? x.filter(n => typeof n === 'string') : []);
 
 /** 기본값을 채운 설정. 순수 함수 (테스트 대상). */
 export function normalizeConfig(raw = {}) {
-  const v = raw.verify || {};
+  const v = isObj(raw.verify) ? raw.verify : {};
   const g = raw.guard || {};
   return {
     verify: {
-      commands: v.commands || {},
-      onEdit: v.onEdit || null,
-      onEditExtensions: v.onEditExtensions || ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'],
-      onStop: v.onStop || [],
-      onCommit: v.onCommit || [],
+      commands: isObj(v.commands) ? v.commands : {},
+      onEdit: typeof v.onEdit === 'string' && v.onEdit.trim() ? v.onEdit : null,
+      onEditExtensions: Array.isArray(v.onEditExtensions) ? v.onEditExtensions : ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue'],
+      onStop: names(v.onStop),
+      onCommit: names(v.onCommit),
     },
     gates: { block: raw.gates?.block !== false },
     guard: {
@@ -101,7 +120,15 @@ export function changedFiles(root) {
 
 /** 설정의 명령 이름 목록을 실제 명령으로 바꾼다. 없는 이름은 건너뛴다. */
 export function resolveCommands(names, commands) {
+  if (!Array.isArray(names) || !isObj(commands)) return [];
   return names.map(n => ({ name: n, cmd: commands[n] })).filter(x => typeof x.cmd === 'string' && x.cmd.trim());
+}
+
+/** onStop·onCommit 에 적었지만 verify.commands 에 없는(또는 빈) 이름. 순수 함수. */
+export function unknownCommandNames(verify) {
+  const cmds = isObj(verify?.commands) ? verify.commands : {};
+  const missing = list => names(list).filter(n => !(typeof cmds[n] === 'string' && cmds[n].trim()));
+  return { onStop: missing(verify?.onStop), onCommit: missing(verify?.onCommit) };
 }
 
 export function emit(obj) {

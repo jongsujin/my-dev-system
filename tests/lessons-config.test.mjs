@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
-import { normalizeConfig, resolveCommands } from '../hooks/scripts/lib.mjs';
+import { normalizeConfig, resolveCommands, unknownCommandNames } from '../hooks/scripts/lib.mjs';
 
 const MD = `# 교훈
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->
@@ -39,4 +39,19 @@ test('설정 기본값', () => {
 
 test('명령 이름 해석: 없는 이름은 건너뜀', () => {
   assert.deepEqual(resolveCommands(['lint', 'nope', 'test'], { lint: 'npm run lint', test: ' ' }), [{ name: 'lint', cmd: 'npm run lint' }]);
+});
+
+test('잘못된 형식도 던지지 않는다', () => {
+  const c = normalizeConfig({ verify: { onStop: 'lint', onCommit: 3, commands: [] } });
+  assert.deepEqual(c.verify.onStop, ['lint']);
+  assert.deepEqual(c.verify.onCommit, []);
+  assert.deepEqual(c.verify.commands, {});
+  assert.deepEqual(resolveCommands('lint', { lint: 'x' }), []);
+});
+
+test('정의되지 않은 명령 이름', () => {
+  const verify = { commands: { lint: 'npm run lint', empty: ' ' }, onStop: ['lint', 'typechek'], onCommit: ['empty', 'lint'] };
+  assert.deepEqual(unknownCommandNames(verify), { onStop: ['typechek'], onCommit: ['empty'] });
+  assert.deepEqual(unknownCommandNames({ onStop: 'x' }), { onStop: ['x'], onCommit: [] });
+  assert.deepEqual(unknownCommandNames(undefined), { onStop: [], onCommit: [] });
 });

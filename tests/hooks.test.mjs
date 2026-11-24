@@ -61,3 +61,16 @@ test('onEdit: 따옴표로 감싼 {file} 도 동작', () => {
     assert.equal(fail.decision, 'block', tpl);
   }
 });
+
+test('SessionStart: 깨진 설정은 깨졌다고, 없는 이름은 경고로', () => {
+  const broken = makeRepo('{ "verify": ');
+  const a = hook('session-start.mjs', { cwd: broken, session_id: 'e-broken', source: 'startup' }).hookSpecificOutput.additionalContext;
+  assert.match(a, /깨져 있어/);
+  assert.match(a, /JSON/);
+  assert.match(a, /게이트는 모두 꺼져/);
+  assert.doesNotMatch(a, /이 없어 위험 명령 차단만/);
+
+  const typo = makeRepo({ verify: { commands: { typecheck: 'true' }, onCommit: ['typechek'] } });
+  const b = hook('session-start.mjs', { cwd: typo, session_id: 'e-typo', source: 'startup' }).hookSpecificOutput.additionalContext;
+  assert.match(b, /verify\.onCommit 의 \[typechek\]/);
+});
