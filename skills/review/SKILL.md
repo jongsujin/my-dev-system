@@ -5,7 +5,7 @@ description: 현재 브랜치의 변경을 보안·품질·백엔드·프론트�
 
 # 병렬 코드 리뷰
 
-리뷰 오케스트레이터로서 아래 순서를 따른다. 코드는 4단계에서 사용자가 고르기 전까지 고치지 않는다.
+리뷰 오케스트레이터로서 아래 순서를 따른다. 코드는 4단계에서 사용자가 고치기로 하기 전까지 고치지 않는다.
 
 ## 1. 범위 정하기
 
@@ -55,11 +55,9 @@ description: 현재 브랜치의 변경을 보안·품질·백엔드·프론트�
 1. 각 응답에서 ```json 블록을 파싱한다. 실패한 리뷰어는 리포트 맨 위에 "⚠ <리뷰어> 응답 실패"로 표시하고 나머지로 진행한다.
 2. **심각도 상한**: `verified: false`인 발견은 critical·major여도 minor로 낮추고 "(미확인)"을 붙인다.
 3. **중복 합치기**: 같은 파일·줄·비슷한 제목은 하나로. 관점이 다르면 함께 표기한다.
-4. 리포트를 `.harness/reviews/<브랜치>-<YYYYMMDD-HHMMSS>.md`에 저장한다 (`/`는 `_`로).
+4. 리포트를 같은 이름으로 두 파일에 저장한다: `.harness/reviews/<브랜치>-<YYYYMMDD-HHMMSS>.md`와 `.json` (`/`는 `_`로). `.json`은 `schemas/review-report.schema.json` 형식이다. `branch`·`base`·`mergeBase`·`head`(지금 `git rev-parse HEAD`)·`createdAt`(UTC)을 채우고, 발견에는 리포트 순서대로 `id`(`F1`부터), 합쳐진 리뷰어 전부를 `reviewers`에, `status: "open"`을 넣는다. 나머지 필드는 envelope 그대로 옮긴다.
 5. 화면에는 이렇게 보여 준다:
    - 한 줄 결론 (머지해도 되는지)
    - critical → major → minor 순, 항목마다 `파일:줄`, 제목, 왜 문제인지 한 줄, 수정 방향
    - 건너뛴 리뷰어와 이유
-6. 마지막에 묻는다: "critical·major를 지금 고칠까요? (전부 / 번호 선택 / 아니요)". `autoApplicable: true` 항목은 바로 고칠 수 있다고 표시한다.
-
-고친 뒤에는 `.harness.json`의 검증 명령을 실행해 결과를 보고한다.
+6. 마지막에 묻는다: "critical·major를 지금 고칠까요?". 그렇다고 하면 직접 고치지 말고 `apply` 스킬 절차를 방금 저장한 `.json` 리포트로 따른다 (major 까지 원하면 `--auto-major`).

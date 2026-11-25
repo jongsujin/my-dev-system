@@ -31,7 +31,8 @@
       "type": "object",
       "properties": {
         "base": { "type": "string" },
-        "reviewers": { "type": "array", "items": { "enum": ["security", "quality", "backend", "frontend", "convention", "test"] } }
+        "reviewers": { "type": "array", "items": { "enum": ["security", "quality", "backend", "frontend", "convention", "test"] } },
+        "protect": { "type": "array", "items": { "type": "string" }, "description": "apply 스킬이 고치지 않을 파일 glob. 없으면 패키지 매니페스트·잠금 파일·마이그레이션·.harness.json" }
       }
     },
     "context": {

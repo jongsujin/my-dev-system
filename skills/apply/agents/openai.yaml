@@ -1,0 +1,6 @@
+interface:
+  display_name: "리뷰 발견 적용"
+  short_description: "리뷰 리포트의 발견을 근거 대조 후 적용"
+  default_prompt: "Use $apply to apply the findings from my latest review report."
+policy:
+  allow_implicit_invocation: true

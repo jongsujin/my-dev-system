@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "my-harness/review-report",
+  "title": "통합 리뷰 리포트 (.harness/reviews/*.json)",
+  "type": "object",
+  "required": ["version", "branch", "base", "createdAt", "findings"],
+  "properties": {
+    "version": { "const": 1 },
+    "branch": { "type": "string" },
+    "base": { "type": "string", "description": "해석된 base ref. 예: origin/main" },
+    "mergeBase": { "type": "string" },
+    "head": { "type": "string", "description": "리뷰 시점 HEAD sha. 적용 전 현재 HEAD 와 비교한다." },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "reviewers", "severity", "category", "file", "title", "evidence", "why", "fix", "verified"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^F[1-9][0-9]*$", "description": "심각도 상한·중복 합치기 후 리포트 순서대로 F1..Fn" },
+          "reviewers": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "이 발견으로 합쳐진 리뷰어 전부" },
+          "status": { "enum": ["open", "applied", "skipped"], "default": "open", "description": "apply 스킬이 갱신한다" },
+          "severity": { "enum": ["critical", "major", "minor"] },
+          "category": { "type": "string" },
+          "file": { "type": "string", "description": "레포 루트 기준 상대 경로" },
+          "line": { "type": "integer" },
+          "title": { "type": "string" },
+          "evidence": { "type": "string", "description": "코드 원문 인용. 적용 전 이 줄들이 파일에 그대로 있는지 확인한다." },
+          "why": { "type": "string" },
+          "fix": { "type": "string" },
+          "verified": { "type": "boolean" },
+          "autoApplicable": { "type": "boolean", "description": "없으면 자동 적용하지 않는다" }
+        }
+      }
+    }
+  }
+}
