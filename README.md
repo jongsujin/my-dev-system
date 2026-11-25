@@ -28,7 +28,7 @@ codex plugin add harness@my-harness
 codex plugin list                                     # harness@my-harness  installed, enabled
 ```
 
-플러그인은 스킬 네 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 훅 내용이 바뀌면 다시 묻는다.
+플러그인은 스킬 다섯 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 훅 내용이 바뀌면 다시 묻는다.
 
 스킬마다 `skills/<이름>/agents/openai.yaml`에 Codex용 표시 이름·설명·기본 프롬프트·암묵 호출 정책을 둔다(`new-project`는 명시 호출만). Claude Code는 이 파일을 무시한다.
 
@@ -86,10 +86,11 @@ Claude Code와 달라지는 점:
 | --- | --- |
 | “이 레포 온보딩해줘” | 기존 프로젝트에서 확인한 명령과 위험 영역을 바탕으로 온보딩 문서, `.harness.json`, `AGENTS.md` 초안을 제안한다. |
 | “새 프로젝트 만들자” | 요구사항과 스택을 정한 뒤 린트·타입 검사·테스트·CI를 갖춘 골격과 첫 기능을 만든다. |
-| “PR 올리기 전에 리뷰해줘” | 보안·품질·백엔드·프론트엔드·프로젝트 규칙·테스트 중 변경에 맞는 관점으로 리뷰한다. 결과는 `.harness/reviews/`에 저장한다. |
+| “PR 올리기 전에 리뷰해줘” | 보안·품질·백엔드·프론트엔드·프로젝트 규칙·테스트 중 변경에 맞는 관점으로 리뷰한다. 결과는 `.harness/reviews/`에 같은 이름의 `.md`와 `.json`으로 저장한다. |
+| “리뷰 결과 적용해줘” | 리뷰 리포트의 근거가 지금 코드와 정확히 일치하는지 스크립트로 먼저 확인하고, 일치하는 critical은 바로, 나머지는 고른 것만 고친 뒤 검증 명령을 실행한다. |
 | “다음부터 이 방식으로 해줘. 기억해” | `.harness/lessons.md`에 작업 노트를 기록하고, 반복된 항목을 규칙이나 훅으로 옮길지 제안한다. |
 
-리뷰 기준 브랜치의 기본값은 `main`이다. 프로젝트별로 `review.base`와 `review.reviewers`를 바꿀 수 있다. 각 리뷰어는 파일 위치, 근거, 영향과 수정 방향을 같은 형식으로 반환한다. [스킬 정의](skills/) · [에이전트 정의](agents/) · [리뷰 결과 스키마](schemas/review-envelope.schema.json)
+리뷰 기준 브랜치의 기본값은 `main`이다. 프로젝트별로 `review.base`와 `review.reviewers`를 바꿀 수 있다. 각 리뷰어는 파일 위치, 근거, 영향과 수정 방향을 같은 형식으로 반환한다. `review.protect`에 glob을 적으면 적용 스킬이 고치지 않을 파일을 바꾼다(기본은 패키지 매니페스트·잠금 파일·마이그레이션·`.harness.json`). [스킬 정의](skills/) · [에이전트 정의](agents/) · [리뷰 결과 스키마](schemas/review-envelope.schema.json) · [리뷰 리포트 스키마](schemas/review-report.schema.json)
 
 ## 테스트와 규칙 내보내기
 
