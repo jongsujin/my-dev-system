@@ -2,7 +2,7 @@
 import { test, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { STATUSES, buildPlan, globToRegExp, matchesAny, DEFAULT_PROTECT } from '../skills/apply/scripts/apply-plan.mjs';
@@ -209,4 +209,18 @@ test('.harness.json review.protect 로 보호 목록을 바꾸고, 깨진 설정
 test('리포트 스키마의 status enum 은 스크립트가 받는 값과 같음', () => {
   const schema = JSON.parse(readFileSync(new URL('../schemas/review-report.schema.json', import.meta.url), 'utf8'));
   assert.deepEqual(schema.properties.findings.items.properties.status.enum, STATUSES);
+});
+
+test('심볼릭 링크 경로로 실행해도 CLI 로 동작', () => {
+  const dir = makeDir({ 'src/a.js': 'const x = 1;\n', 'r.json': JSON.stringify(report([finding()])) });
+  const link = join(dir, 'link.mjs');
+  symlinkSync(SCRIPT, link);
+  const r = spawnSync(process.execPath, [link, 'r.json'], { cwd: dir, encoding: 'utf8' });
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /바로 적용 1/);
+});
+
+test('같은 파일을 다른 표기(./)로 가리켜도 겹침을 잡음', () => {
+  const p = plan({ 'src/a.js': 'const x = 1;\n' }, [finding(), finding({ id: 'F2', file: './src/a.js' })]);
+  assert.deepEqual(p.items.map(i => i.bucket), ['confirm', 'confirm']);
 });

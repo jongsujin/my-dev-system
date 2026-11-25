@@ -3,7 +3,7 @@
 // 결정적으로 확인하고 바로 적용 / 확인 후 적용 / 안내만 / 적용하지 않음으로 나눈다.
 // Claude Code·Codex 어디서든 스킬 폴더 기준으로 실행되도록 hooks/scripts 를 불러오지 않는다.
 import { spawnSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -181,7 +181,7 @@ export function buildPlan(root, reportPath, report, opts = {}) {
   for (let i = 0; i < located.length; i++) {
     for (let j = i + 1; j < located.length; j++) {
       const a = located[i], b = located[j];
-      if (a.loc.status !== 'exact' || b.loc.status !== 'exact' || a.f.file !== b.f.file) continue;
+      if (a.loc.status !== 'exact' || b.loc.status !== 'exact' || resolve(root, a.f.file) !== resolve(root, b.f.file)) continue;
       if (a.loc.line <= b.loc.endLine && b.loc.line <= a.loc.endLine) {
         conflicts.get(a.f.id).push(b.f.id);
         conflicts.get(b.f.id).push(a.f.id);
@@ -258,7 +258,9 @@ export function main(argv, cwd = process.cwd()) {
   return flags.has('--json') ? JSON.stringify(plan, null, 2) : formatPlan(plan);
 }
 
-if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+// 심볼릭 링크 경로로 실행돼도(예: macOS 의 /tmp) 직접 실행으로 알아보도록 실제 경로로 비교한다.
+const realOrSelf = p => { try { return realpathSync(p); } catch { return resolve(p); } };
+if (process.argv[1] && realOrSelf(process.argv[1]) === realOrSelf(fileURLToPath(import.meta.url))) {
   try {
     console.log(main(process.argv.slice(2)));
   } catch (e) {
