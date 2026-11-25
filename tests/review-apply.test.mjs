@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { buildPlan, globToRegExp, matchesAny, DEFAULT_PROTECT } from '../skills/apply/scripts/apply-plan.mjs';
+import { STATUSES, buildPlan, globToRegExp, matchesAny, DEFAULT_PROTECT } from '../skills/apply/scripts/apply-plan.mjs';
 
 const SCRIPT = new URL('../skills/apply/scripts/apply-plan.mjs', import.meta.url).pathname;
 const cleanup = [];
@@ -206,3 +206,7 @@ test('.harness.json review.protect 로 보호 목록을 바꾸고, 깨진 설정
   assert.deepEqual(broken.items.map(i => i.bucket), ['auto', 'blocked']);
 });
 
+test('리포트 스키마의 status enum 은 스크립트가 받는 값과 같음', () => {
+  const schema = JSON.parse(readFileSync(new URL('../schemas/review-report.schema.json', import.meta.url), 'utf8'));
+  assert.deepEqual(schema.properties.findings.items.properties.status.enum, STATUSES);
+});
