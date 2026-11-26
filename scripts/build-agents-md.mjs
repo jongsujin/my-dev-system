@@ -14,13 +14,13 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const sets = ['common', ...process.argv.slice(2).filter(s => s !== 'common')];
 
 const sections = sets.map(set => {
-  const dir = join(root, 'rules', set);
+  const dir = join(root, 'plugins/harness/rules', set);
   if (!existsSync(dir)) { console.error(`rules/${set} 없음 — 건너뜀`); return ''; }
   return readdirSync(dir).filter(f => f.endsWith('.md')).sort()
     .map(f => readFileSync(join(dir, f), 'utf8').trim().replace(/^# /gm, '## ')).join('\n\n');
 }).filter(Boolean);
 
-const out = `# 공용 에이전트 지침 (my-harness: ${sets.join(', ')})\n\n> 생성 파일. 원본은 my-harness/rules/ 에서 고친다.\n\n${sections.join('\n\n')}\n`;
+const out = `# 공용 에이전트 지침 (my-harness: ${sets.join(', ')})\n\n> 생성 파일. 원본은 plugins/harness/rules/ 에서 고친다.\n\n${sections.join('\n\n')}\n`;
 mkdirSync(join(root, 'dist'), { recursive: true });
 writeFileSync(join(root, 'dist', 'AGENTS.md'), out);
 console.log(`dist/AGENTS.md (${out.length}자, 규칙 세트: ${sets.join(', ')})`);

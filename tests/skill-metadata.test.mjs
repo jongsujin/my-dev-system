@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
-const skills = new URL('../skills/', import.meta.url);
+const skills = new URL('../plugins/harness/skills/', import.meta.url);
 const names = readdirSync(skills).filter(n => existsSync(new URL(`${n}/SKILL.md`, skills)));
 const explicitOnly = new Set(['new-project']);
 

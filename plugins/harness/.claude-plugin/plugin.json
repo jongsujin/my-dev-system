@@ -1,6 +1,6 @@
 {
   "name": "harness",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "개인 에이전트 하네스. 세션 시작 시 규칙·작업 노트 주입, 위험 명령 차단, 편집 직후 검사, 완료 전 검증 게이트, 보안·품질·백엔드·프론트엔드(Toss)·컨벤션·테스트 6개 리뷰어 병렬 리뷰, 리뷰 발견 적용·온보딩·새 프로젝트·학습 스킬. 레포의 .harness.json 으로 켠다.",
   "author": { "name": "my-harness" },
   "license": "MIT",

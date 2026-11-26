@@ -27,7 +27,7 @@ test('커밋된 개요 그림은 생성 스크립트 출력과 같다', () => {
 });
 
 test('개요 그림의 리뷰어 수는 agents/reviewer-*.md 수와 같다', () => {
-  const reviewers = readdirSync(join(ROOT, 'agents')).filter(f => /^reviewer-.+\.md$/.test(f)).length;
+  const reviewers = readdirSync(join(ROOT, 'plugins/harness/agents')).filter(f => /^reviewer-.+\.md$/.test(f)).length;
   const desc = generate()['overview-light.svg'].match(/리뷰어 (\d+)개/);
   assert.ok(desc, '그림 설명에 리뷰어 수가 없다');
   assert.equal(Number(desc[1]), reviewers);

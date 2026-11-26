@@ -2,6 +2,8 @@
 
 이 저장소는 개인 에이전트 하네스의 **원본**이다. 플랫폼 폴더(`.claude/`, `.codex/`)는 설치 결과물이므로 직접 고치지 않는다. 예외로 매니페스트는 원본이다: `.claude-plugin/`(Claude Code), `.codex-plugin/`·`.agents/plugins/marketplace.json`(Codex). 두 플랫폼의 `version`은 함께 올린다.
 
+두 마켓플레이스는 `plugins/harness/`를 배포한다. 플러그인 매니페스트와 아래 런타임 폴더는 이 디렉터리에 두고, 개발용 `scripts/`와 `tests/`는 저장소 루트에 둔다.
+
 ## 구조
 
 | 폴더 | 층 | 내용 |

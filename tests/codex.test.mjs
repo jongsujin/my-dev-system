@@ -2,9 +2,9 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { BEGIN, END, configBlock, toCodexRole, upsertBlock } from '../scripts/codex-agents.mjs';
-import { toPlatformVerdict } from '../hooks/scripts/guard-rules.mjs';
+import { toPlatformVerdict } from '../plugins/harness/hooks/scripts/guard-rules.mjs';
 
-const md = readFileSync(new URL('../agents/reviewer-security.md', import.meta.url), 'utf8');
+const md = readFileSync(new URL('../plugins/harness/agents/reviewer-security.md', import.meta.url), 'utf8');
 
 test('에이전트 → Codex 역할', () => {
   const r = toCodexRole(md);
@@ -16,7 +16,7 @@ test('에이전트 → Codex 역할', () => {
 });
 
 test('reviewer-backend 도 Codex 역할로 변환', () => {
-  const r = toCodexRole(readFileSync(new URL('../agents/reviewer-backend.md', import.meta.url), 'utf8'));
+  const r = toCodexRole(readFileSync(new URL('../plugins/harness/agents/reviewer-backend.md', import.meta.url), 'utf8'));
   assert.equal(r.name, 'harness_reviewer_backend');
   assert.equal(r.file, 'harness-reviewer-backend.toml');
   assert.match(r.toml, /sandbox_mode = "read-only"/);

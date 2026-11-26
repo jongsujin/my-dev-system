@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "harness",
-      "source": "./",
+      "source": "./plugins/harness",
       "description": "규칙 주입 · 위험 명령 차단 · 검증 게이트 · 6관점 병렬 리뷰 · 리뷰 발견 적용 · 온보딩/새 프로젝트/학습 스킬"
     }
   ]

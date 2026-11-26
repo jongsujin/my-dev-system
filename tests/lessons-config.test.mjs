@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseLessons, promotionCandidates, topLessons } from '../hooks/scripts/lessons.mjs';
-import { MAX_BLOCKS, MIN_COMMAND_MS, failureHead, normalizeConfig, runWithin, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../hooks/scripts/lib.mjs';
+import { parseLessons, promotionCandidates, topLessons } from '../plugins/harness/hooks/scripts/lessons.mjs';
+import { MAX_BLOCKS, MIN_COMMAND_MS, failureHead, normalizeConfig, runWithin, resolveCommands, sessionChanges, stopDecision, unknownCommandNames } from '../plugins/harness/hooks/scripts/lib.mjs';
 
 const MD = `# 작업 노트
 - [×3] 커밋 메시지는 한글로 <!-- level:rule updated:2026-11-01 -->

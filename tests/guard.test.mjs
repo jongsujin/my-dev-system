@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { checkCommand, isCommit, parseGit, pushDir, tokenize } from '../hooks/scripts/guard-rules.mjs';
+import { checkCommand, isCommit, parseGit, pushDir, tokenize } from '../plugins/harness/hooks/scripts/guard-rules.mjs';
 
 const d = cmd => checkCommand(cmd).decision;
 

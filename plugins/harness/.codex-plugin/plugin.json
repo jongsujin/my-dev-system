@@ -1,6 +1,6 @@
 {
   "name": "harness",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "개인 에이전트 하네스 (Codex). 스킬(review, apply, onboard, new-project, learn), 세션 시작 규칙 주입, 위험 명령 차단, 커밋·완료 전 검증 게이트.",
   "author": { "name": "my-harness" },
   "license": "MIT",

@@ -1,6 +1,6 @@
 {
   "name": "my-harness",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "type": "module",
   "description": "개인 에이전트 하네스 (Claude Code 플러그인 + 다른 플랫폼 내보내기)",

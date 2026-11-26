@@ -67,7 +67,7 @@ export function upsertBlock(config, block) {
 }
 
 function main() {
-  const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), '../plugins/harness');
   const codexHome = process.env.CODEX_HOME || join(homedir(), '.codex');
   const mode = process.argv.includes('--apply') ? 'apply' : process.argv.includes('--remove') ? 'remove' : 'preview';
 

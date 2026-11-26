@@ -5,9 +5,9 @@ import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { STATUSES, buildPlan, globToRegExp, matchesAny, DEFAULT_PROTECT } from '../skills/apply/scripts/apply-plan.mjs';
+import { STATUSES, buildPlan, globToRegExp, matchesAny, DEFAULT_PROTECT } from '../plugins/harness/skills/apply/scripts/apply-plan.mjs';
 
-const SCRIPT = new URL('../skills/apply/scripts/apply-plan.mjs', import.meta.url).pathname;
+const SCRIPT = new URL('../plugins/harness/skills/apply/scripts/apply-plan.mjs', import.meta.url).pathname;
 const cleanup = [];
 after(() => { for (const p of cleanup) rmSync(p, { recursive: true, force: true }); });
 
@@ -207,7 +207,7 @@ test('.harness.json review.protect 로 보호 목록을 바꾸고, 깨진 설정
 });
 
 test('리포트 스키마의 status enum 은 스크립트가 받는 값과 같음', () => {
-  const schema = JSON.parse(readFileSync(new URL('../schemas/review-report.schema.json', import.meta.url), 'utf8'));
+  const schema = JSON.parse(readFileSync(new URL('../plugins/harness/schemas/review-report.schema.json', import.meta.url), 'utf8'));
   assert.deepEqual(schema.properties.findings.items.properties.status.enum, STATUSES);
 });
 

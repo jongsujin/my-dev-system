@@ -5,9 +5,9 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { baselinePath, counterPath, fileCommand } from '../hooks/scripts/lib.mjs';
+import { baselinePath, counterPath, fileCommand } from '../plugins/harness/hooks/scripts/lib.mjs';
 
-const SCRIPTS = new URL('../hooks/scripts/', import.meta.url).pathname;
+const SCRIPTS = new URL('../plugins/harness/hooks/scripts/', import.meta.url).pathname;
 const cleanup = [];
 /** 세션 id 마다 tmpdir 의 기준선·카운터 파일도 지운다. */
 export function sid(name) {

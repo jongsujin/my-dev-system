@@ -28,9 +28,9 @@ codex plugin add harness@my-harness
 codex plugin list                                     # harness@my-harness  installed, enabled
 ```
 
-플러그인은 스킬 다섯 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 훅 내용이 바뀌면 다시 묻는다.
+플러그인은 스킬 다섯 개와 훅 세 개(세션 시작, Bash 실행 전, 응답 완료 전)를 설치한다. Codex는 새 훅을 처음 실행하기 전에 신뢰 여부를 묻는다. 승인하면 `~/.codex/config.toml`의 `[hooks.state]`에 해시가 기록되고, 플러그인 파일이 바뀌면 다시 묻는다. 업데이트 뒤 승인 요청이 뜨면 CLI의 `/hooks` 또는 앱 설정의 Hooks에서 변경된 훅을 검토하고 승인한다.
 
-스킬마다 `skills/<이름>/agents/openai.yaml`에 Codex용 표시 이름·설명·기본 프롬프트·암묵 호출 정책을 둔다(`new-project`는 명시 호출만). Claude Code는 이 파일을 무시한다.
+스킬마다 `plugins/harness/skills/<이름>/agents/openai.yaml`에 Codex용 표시 이름·설명·기본 프롬프트·암묵 호출 정책을 둔다(`new-project`는 명시 호출만). Claude Code는 이 파일을 무시한다.
 
 Codex 플러그인은 서브에이전트를 설치하지 않는다. 리뷰어를 Codex 역할로 쓰려면 저장소 사본에서 변환 스크립트를 실행한다.
 
@@ -64,7 +64,7 @@ Claude Code와 달라지는 점:
 }
 ```
 
-이 설정으로 Claude Code가 기본 검사 대상인 JS·TS·Vue 계열 파일을 변경한 뒤 응답을 끝내면 테스트가 실행된다. Claude Code의 Bash 도구로 커밋할 때도 테스트가 실행되며, 실패하면 커밋을 막는다. 프로젝트의 린트·타입 검사까지 연결하려면 실제 스크립트 이름에 맞춰 템플릿을 수정한다. 템플릿의 `context.rules`는 프론트엔드 예시다. 서버 코드가 있으면 `backend`를 더한다. [전체 설정 예시](templates/harness.json) · [설정 스키마](schemas/harness-config.schema.json)
+이 설정으로 Claude Code가 기본 검사 대상인 JS·TS·Vue 계열 파일을 변경한 뒤 응답을 끝내면 테스트가 실행된다. Claude Code의 Bash 도구로 커밋할 때도 테스트가 실행되며, 실패하면 커밋을 막는다. 프로젝트의 린트·타입 검사까지 연결하려면 실제 스크립트 이름에 맞춰 템플릿을 수정한다. 템플릿의 `context.rules`는 프론트엔드 예시다. 서버 코드가 있으면 `backend`를 더한다. [전체 설정 예시](plugins/harness/templates/harness.json) · [설정 스키마](plugins/harness/schemas/harness-config.schema.json)
 
 ## 훅이 실행되는 시점
 
@@ -78,7 +78,7 @@ Claude Code와 달라지는 점:
 
 완료·커밋 검증 명령은 하나당 `verify.timeoutSec`(기본 180초)까지 실행하고, 훅 전체로는 커밋 270초·완료 570초 안에서 끝낸다. 시간 안에 끝나지 않았거나 남은 시간이 없어 실행하지 못한 검사는 실패로 처리한다.
 
-설정 파일이 없어도 공통 규칙과 기존 작업 노트를 읽고 기본 위험 명령을 검사한다. 설정 파일이 JSON으로 읽히지 않으면 검증 게이트를 모두 끄고, 세션 시작 때 파싱 오류를 알린다. `onStop`·`onCommit`에 `verify.commands`에 없는 이름을 적으면 세션 시작 때 경고한다. 완료·커밋 검사 실패를 안내만 하려면 `gates.block`을 `false`로 둔다. 편집 직후 검사는 `verify.onEdit`로 별도 설정한다. [훅 이벤트 정의](hooks/hooks.json) · [기본 명령 패턴](hooks/scripts/guard-rules.mjs)
+설정 파일이 없어도 공통 규칙과 기존 작업 노트를 읽고 기본 위험 명령을 검사한다. 설정 파일이 JSON으로 읽히지 않으면 검증 게이트를 모두 끄고, 세션 시작 때 파싱 오류를 알린다. `onStop`·`onCommit`에 `verify.commands`에 없는 이름을 적으면 세션 시작 때 경고한다. 완료·커밋 검사 실패를 안내만 하려면 `gates.block`을 `false`로 둔다. 편집 직후 검사는 `verify.onEdit`로 별도 설정한다. [훅 이벤트 정의](plugins/harness/hooks/hooks.json) · [기본 명령 패턴](plugins/harness/hooks/scripts/guard-rules.mjs)
 
 ## 스킬
 
@@ -90,7 +90,7 @@ Claude Code와 달라지는 점:
 | “리뷰 결과 적용해줘” | 리뷰 리포트의 근거가 지금 코드와 정확히 일치하는지 스크립트로 먼저 확인하고, 일치하는 critical은 바로, 나머지는 고른 것만 고친 뒤 검증 명령을 실행한다. |
 | “다음부터 이 방식으로 해줘. 기억해” | `.harness/lessons.md`에 작업 노트를 기록하고, 반복된 항목을 규칙이나 훅으로 옮길지 제안한다. |
 
-리뷰 기준 브랜치의 기본값은 `main`이다. 프로젝트별로 `review.base`와 `review.reviewers`를 바꿀 수 있다. 각 리뷰어는 파일 위치, 근거, 영향과 수정 방향을 같은 형식으로 반환한다. `review.protect`에 glob을 적으면 적용 스킬이 고치지 않을 파일을 바꾼다(기본은 패키지 매니페스트·잠금 파일·마이그레이션·`.harness.json`). [스킬 정의](skills/) · [에이전트 정의](agents/) · [리뷰 결과 스키마](schemas/review-envelope.schema.json) · [리뷰 리포트 스키마](schemas/review-report.schema.json)
+리뷰 기준 브랜치의 기본값은 `main`이다. 프로젝트별로 `review.base`와 `review.reviewers`를 바꿀 수 있다. 각 리뷰어는 파일 위치, 근거, 영향과 수정 방향을 같은 형식으로 반환한다. `review.protect`에 glob을 적으면 적용 스킬이 고치지 않을 파일을 바꾼다(기본은 패키지 매니페스트·잠금 파일·마이그레이션·`.harness.json`). [스킬 정의](plugins/harness/skills/) · [에이전트 정의](plugins/harness/agents/) · [리뷰 결과 스키마](plugins/harness/schemas/review-envelope.schema.json) · [리뷰 리포트 스키마](plugins/harness/schemas/review-report.schema.json)
 
 ## 테스트와 규칙 내보내기
 
@@ -103,4 +103,4 @@ npm run build:agents-md -- typescript react
 
 README 위쪽의 개요 그림은 `node scripts/build-overview-svg.mjs`가 `docs/`에 만든다. 훅이나 리뷰어가 바뀌면 스크립트의 목록을 고치고 다시 실행한다.
 
-첫 명령은 위험 명령 판단, 작업 노트 선택, 설정 기본값과 검증 명령 해석을 검사한다. 두 번째 명령은 공통·TypeScript·React 규칙을 `dist/AGENTS.md` 한 파일로 합친다. 인자를 생략하면 공통 규칙만 담는다. 생성된 문서에서 필요한 지침을 Codex 등 다른 에이전트가 읽는 프로젝트의 `AGENTS.md`에 병합할 수 있다. [규칙 원본](rules/) · [내보내기 스크립트](scripts/build-agents-md.mjs)
+첫 명령은 위험 명령 판단, 작업 노트 선택, 설정 기본값과 검증 명령 해석을 검사한다. 두 번째 명령은 공통·TypeScript·React 규칙을 `dist/AGENTS.md` 한 파일로 합친다. 인자를 생략하면 공통 규칙만 담는다. 생성된 문서에서 필요한 지침을 Codex 등 다른 에이전트가 읽는 프로젝트의 `AGENTS.md`에 병합할 수 있다. [규칙 원본](plugins/harness/rules/) · [내보내기 스크립트](scripts/build-agents-md.mjs)
